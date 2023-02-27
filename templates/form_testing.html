@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}testing form Page{% endblock %}
+
+
+
+{% block content %}
+<h1>login formular</h1>
+
+
+<form method="post">
+    {{ form_login.csrf_token }}
+    {{ form_login.login }}
+    {{ form_login.password }}
+    {{ form_login.submit }}
+</form>
+{{ login_error }}
+<br/>
+
+<h1>register formular</h1>
+
+<form method="post">
+    {{ form_register.csrf_token }}
+    {{ form_register.login }}
+    {{ form_register.password }}
+    {{ form_register.password2 }}
+    {{ form_register.submit }}
+</form>
+{{ register_error }}
+
+
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+
+{% block content %}
+    toto je stranka na registraci
+    <form method="post">
+        {{ form_register.csrf_token }}
+        {{ form_register.login }}
+        {{ form_register.password }}
+        {{ form_register.password2 }}
+        {{ form_register.submit }}
+    </form>
+    <hr>
+    {% for field, errors in form_register.errors.items() %}
+    <div class="alert alert-error">
+        {{ form_register[field].label }}: {{ ', '.join(errors) }}
+    </div>
+    {% endfor %}
+
+{% endblock %}
+

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} Ahoj {{ user['login'] }} {% endblock %}
+
+
+{% block content %}
+<h1>Dokoncete registraci</h1>
+<br/>
+{{user}}
+
+<form method="post">
+    {{ form_complete_register.csrf_token }}
+    {{ form_complete_register.name }}
+    {{ form_complete_register.surname }}
+    {{ form_complete_register.birt_date }}
+    {{ form_complete_register.submit }}
+</form>
+<hr>
+{% for field, errors in form_complete_register.errors.items() %}
+<div class="alert alert-error">
+    {{ form_complete_register[field].label }}: {{ ', '.join(errors) }}
+</div>
+{% endfor %}
+
+{% endblock %}
+
+

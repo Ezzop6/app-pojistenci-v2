@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Delete {{product['product_name']}} {% endblock %}
+{% block content %}
+
+<h1>Delete product</h1>
+{{ product }}
+
+<form method="post">
+    {{ form.csrf_token }}
+    {{ form.yes }}
+    {{ form.no }}
+</form>
+
+{% endblock %}

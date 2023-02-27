@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %} Edit {{product['product_name']}} {% endblock %}
+{% block content %}
+
+<h1>Edit product</h1>
+{{ product }}
+
+<h1>toto je stranka pro adminy na editaci produktu</h1>
+<form method="post">
+    {{ form.csrf_token }}
+    {{ form.name }}
+    {{ form.description }}
+    {{ form.price_per_month }}
+    <input type="submit">
+    <hr>
+    {{ error }}
+</form>
+
+{% endblock %}
