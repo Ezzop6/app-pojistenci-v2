@@ -25,8 +25,19 @@ class DbUsers(DbConnection):
         
     def check_if_login_exists(self, login):
         '''Checks if user exists in database'''
-        if self.db.count_documents(login) > 0:
+        if self.db.count_documents({"login": login}) > 0:
             return True
+
+    def check_if_this_login_exists(self, login):
+        '''Checks if user with given login exists in database'''
+        if self.db.count_documents({"login": login}) > 0:
+            return True
+        
+    def check_if_password_is_correct(self, login, password):
+        '''Checks if password is correct'''
+        if self.db.count_documents({"login": login, "password": password}) > 0:
+            return True
+    
         
     def add_user(self, login,password):
         '''Adds user to database'''
@@ -38,19 +49,35 @@ class DbUsers(DbConnection):
     
     def get_user_role(self, user_id):
         '''Returns user role'''
-        user = self.db.find_one({"_id": ObjectId(user_id)})
-        return user["role"]
+        role = self.db.find_one({"_id": ObjectId(user_id)})
+        return role["role"]
     
     def get_user_id(self,login):
-        user = self.db.find_one({"login": login})
-        return user["_id"]
+        id = self.db.find_one({"login": login})
+        return id["_id"]
         
     def get_user_data(self, user_id):
         '''Returns user'''
         user = self.db.find_one({"_id": ObjectId(user_id)})
         return user
     
-    # def create_fake_users(self, number = 1):
+    def update_user_name(self, user_id, name):
+        '''Updates user name'''
+        self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {"name": name}})
+        
+    def update_user_surname(self, user_id, surname):
+        '''Updates user surname'''
+        self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {"surname": surname}})
+    
+    def update_user_birthdate(self, user_id, birthdate):
+        '''Updates user birthdate'''
+        self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {"birthdate": birthdate}})
+        
+    def update_user_address(self, user_id, address):
+        '''Updates user address'''
+        self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {"address": address}})
+        
+    def create_fake_users(self, number = 1):
         '''Creates fake users'''
         for _ in range(number):
             fake_users = RandomUser().new_user()
@@ -62,7 +89,27 @@ class DbProducts(DbConnection):
     def __init__(self):
         super().__init__()
         self.db = self.client.pojistenci_uzivatele.products
+        
+    def add_product(self, product):
+        '''Adds product to database'''
+        self.db.insert_one(product)
+        
+    def get_all_products(self):
+        '''Returns all products'''
+        return self.db.find()
+    
+    def check_if_name_exists(self, product_name):
+        '''Checks if product exists'''
+        if self.db.count_documents({"name": product_name}) > 0:
+            cprint("Product already exists")
+            return True
+    
+    def get_product_by_name(self,produkt_name):
+        produkt = self.db.find_one({"name": produkt_name})
+        return produkt
+    
+    def delete_product(self, produkt_name):
+        self.db.delete_one({"name": produkt_name})
+        
 
-
-usser = DbUsers()
-usser.add_user("tsest","test")
+    

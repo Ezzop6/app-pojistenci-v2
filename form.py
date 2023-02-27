@@ -1,8 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, IntegerField, widgets, StringField, PasswordField, SubmitField, DateField, validators,ValidationError
-from databaze import DbUsers
+from wtforms import SelectField, TextAreaField, IntegerField ,widgets, StringField, PasswordField, SubmitField, DateField, validators,ValidationError
+from databaze import DbUsers, DbProducts
 import datetime
+
 db_user = DbUsers()
+db_product = DbProducts()
+
 forbidden_words = ["admin","root","administrator"]
 forrbiden_letters = "!@#$%^&*()_+{}|:<>?/.,;'[]\=-`~"
 
@@ -17,38 +20,6 @@ class CustomTest:
         for letter in data:
             if letter.isdigit():
                 return True
-    
-class LoginForm(FlaskForm):
-    login = StringField("Login", widget = widgets.Input(input_type = "text"),
-        render_kw={"placeholder": "Uživatelské jméno"},
-        validators=[validators.DataRequired(message="Musíte zadat login"),
-                    validators.Length(min=3, max=20, message="Login musí mít 3 až 20 znaků")])
-    password = PasswordField("Heslo", widget = widgets.Input(input_type = "password"),
-        render_kw={"placeholder": "Heslo"},
-        validators=[validators.DataRequired(message="Musíte zadat heslo"),
-                    validators.Length(min=4, message="Heslo musí mít minimálně 4 znaků")])
-    submit = SubmitField("Přihlásit se")
-    
-    def validate_login(self, login):
-        login = login.data
-        if not db_user.check_if_login_exists(login):
-            raise ValidationError(f"Login: {login} neexistuje")
-        
-    def validate_password(self, password):
-        login = self.login.data
-        password = password.data
-        if not db_user.try_login(login, password):
-            raise ValidationError("Špatné heslo")
-
-class EditProductForm(FlaskForm):
-    name = StringField("Název", widget = widgets.Input(input_type = "text"),render_kw = {"placeholder": "Název"})
-    description = StringField("Popis", widget = widgets.Input(input_type = "text"),render_kw = {"placeholder": "Popis"})
-    price_per_month = IntegerField("Cena", widget = widgets.Input(input_type = "number"),render_kw = {"placeholder": "Cena"},default = 0)
-    submit = SubmitField("Uložit")
-    
-class YesNoForm(FlaskForm):
-    yes = SubmitField("Ano")
-    no = SubmitField("Ne")
     
 class CompleteRegisterForm(FlaskForm):
     name = StringField("Jméno", widget = widgets.Input(input_type = "text"),
@@ -86,8 +57,7 @@ class CompleteRegisterForm(FlaskForm):
         birt_date = birt_date.data
         if birt_date > datetime.date.today():
             raise ValidationError(f"Sorry tahle aplikace nepodporuje cesty časem: {birt_date}")
-        
-        
+
 class RegisterForm(FlaskForm):
     login = StringField("Login", widget=widgets.Input(input_type = "text"),
         render_kw = {"placeholder": "Uživatelské jméno"}, 
@@ -130,3 +100,55 @@ class RegisterForm(FlaskForm):
         elif password != self.password2.data:
             raise ValidationError("Hesla se neshodují")
         
+class LoginForm(FlaskForm):
+    login = StringField("Login", widget = widgets.Input(input_type = "text"),
+        render_kw={"placeholder": "Uživatelské jméno"},
+        validators=[validators.DataRequired(message="Musíte zadat login"),
+                    validators.Length(min=3, max=20, message="Login musí mít 3 až 20 znaků")])
+    password = PasswordField("Heslo", widget = widgets.Input(input_type = "password"),
+        render_kw={"placeholder": "Heslo"},
+        validators=[validators.DataRequired(message="Musíte zadat heslo"),
+                    validators.Length(min=4, message="Heslo musí mít minimálně 4 znaků")])
+    submit = SubmitField("Přihlásit se")
+    
+    def validate_login(self, login):
+        login = login.data
+        if not db_user.check_if_login_exists(login):
+            raise ValidationError(f"Login: {login} neexistuje")
+        
+    def validate_password(self, password):
+        login = self.login.data
+        password = password.data
+        if not db_user.check_if_password_is_correct(login, password):
+            raise ValidationError("Špatné heslo")
+
+class EditProductForm(FlaskForm):
+    name = StringField("Název", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "Název"},
+        validators = [validators.DataRequired(message="Musíte zadat název produktu"),
+                    validators.Length(min=3, max=20, message="Název musí mít 3 až 20 znaků")])
+    description = TextAreaField("Popis", widget = widgets.TextArea(),
+        render_kw = {"placeholder": "Popis"},
+        validators = [validators.DataRequired(message="Musíte zadat popis produktu"),
+                    validators.Length(min=20, max=666, message="Popis musí mít 20 až 666 znaků")])
+    price_per_month = IntegerField("Cena za měsíc", widget = widgets.Input(input_type = "number"),
+        render_kw = {"placeholder": "Cena za měsíc"},
+        validators = [validators.DataRequired(message="Musíte zadat cenu za měsíc")])
+    submit = SubmitField("Potvrdit")
+    
+    def validate_price_per_month(self, price_per_month):
+        price_per_month = price_per_month.data
+        if price_per_month < 0:
+            raise ValidationError(f"Cena za měsíc musí být kladná: {price_per_month}")
+        
+    def validate_name(self, name):
+        name = name.data
+        if name in forbidden_words:
+            raise ValidationError(f"nesmíš použít tento název: {name}")
+        if db_product.check_if_name_exists(name) != None:
+            raise ValidationError(f"Produkt s názvem {name} již existuje")
+        
+class YesNoForm(FlaskForm):
+    yes = SubmitField("Ano")
+    no = SubmitField("Ne")
+    

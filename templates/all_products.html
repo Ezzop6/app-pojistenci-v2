@@ -4,14 +4,18 @@
 
 {% block content %}
     <h1>toto je stranka pro adminy na editaci produktu</h1>
-    <form method="post">
-        {{ form.csrf_token }}
-        {{ form.name }}
-        {{ form.description }}
-        {{ form.price_per_month }}
+    <form method="POST">
+        {{ new_produkt.csrf_token }}
+        {{ new_produkt.name }}
+        {{ new_produkt.description }}
+        {{ new_produkt.price_per_month }}
         <input type="submit">
         <hr>
-        {{ error }}
+        {% for field, errors in new_produkt.errors.items() %}
+    <div class="alert alert-error">
+        {{ new_produkt[field].label }}: {{ ', '.join(errors) }}
+    </div>
+        {% endfor %}
     </form>
     <section>
         <h2>Producty</h2>
@@ -23,11 +27,11 @@
         </thead>
             {% for product in products %}
                 <tr>
-                    <td>{{ product['product_name'] }}</td>
-                    <td>{{ product['product_description'] }}</td>
-                    <td>{{ product['product_price'] }}</td>
-                    <td><a href="{{ url_for('edit_product',id=product['product_name']) }}">edit</a></td>
-                    <td><a href="{{ url_for('delete_product',id=product['product_name']) }}">delete</a></td>
+                    <td>{{ product['name'] }}</td>
+                    <td>{{ product['description'] }}</td>
+                    <td>{{ product['price'] }}</td>
+                    <td><a href="{{ url_for('edit_product',id=product['name']) }}">edit</a></td>
+                    <td><a href="{{ url_for('delete_product',id=product['name']) }}">delete</a></td>
                 </tr>
             {% endfor %}
         </table>

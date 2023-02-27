@@ -20,10 +20,8 @@ db_product = DbProducts()
 
 class User(UserMixin):
     def __init__(self, login):
-        self.id = db_user.get_user_id(login)
-        user_id = self.id
-        self.role = db_user.get_user_role(user_id)
-        self.user_data = db_user.get_user_data(user_id)
+        self.id = login
+        self.role = db_user.get_user_role(login)
 
 def role_required(role):
     '''Requires login with the specified role '''
@@ -60,6 +58,11 @@ def before_request():
     g.user = None
     if "user" in session:
         g.user = session["user"]
+        
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    logout_user()
+    return redirect(url_for('index_page'))
 
 @app.route('/')
 def index_page():
@@ -69,8 +72,9 @@ def index_page():
 def login_page():
     form_login = LoginForm()
     if form_login.validate_on_submit():
-        cprint("validace v poradku clicked")
-
+        user_id = db_user.get_user_id(form_login.login.data)
+        current_user = User(user_id)
+        login_user(current_user)
         return render_template('index.html')
     return render_template('login.html', form_login = form_login)
 
@@ -78,37 +82,30 @@ def login_page():
 def register_page():
     form_register = RegisterForm()
     if form_register.validate_on_submit():
+        db_user.add_user(form_register.login.data, form_register.password.data)
+        user_id = db_user.get_user_id(form_register.login.data)
+        current_user = User(user_id)
+        login_user(current_user)
         return redirect(url_for('complete_registration', login = form_register.login.data))
     return render_template('register.html',form_register = form_register)
 
-@app.route('/logout', methods=['GET', 'POST'])
-def logout():
-    logout_user()
-    return redirect(url_for('index_page'))
-
+# TODO doresit cas nefunguje birthdate
 @app.route('/register/<login>', methods=['GET', 'POST'])
 @login_required
 @role_required("user")
 def complete_registration(login):
     form_complete_register = CompleteRegisterForm()
     if form_complete_register.validate_on_submit():
-        print(current_user.id)
-        db_user.update_user_data(current_user.id, form_complete_register.name.data, form_complete_register.surname.data)
+        user_id = db_user.get_user_id(login)
+        cprint(user_id)
+        db_user.update_user_name(user_id, form_complete_register.name.data)
+        db_user.update_user_surname(user_id, form_complete_register.surname.data)
+        db_user.update_user_birthdate(user_id, form_complete_register.birt_date.data)
         cprint("validace v poradku clicked") 
     return render_template('complete_registration.html', 
                         login = login, 
                         user = db_user.get_user_data(current_user.id), 
                         form_complete_register = form_complete_register)
-
-
-@app.route('/login_test_user')
-def login_test_user():
-    return redirect(url_for('index_page'))
-
-
-
-
-
 
 
 @app.route('/user', methods=['GET', 'POST'])
@@ -129,7 +126,12 @@ def admin_page():
 def edit_products_page():
     new_produkt = EditProductForm()
     products = db_product.get_all_products()
-    return render_template('all_products.html', form = new_produkt, products = products)
+    if new_produkt.validate_on_submit():
+        cprint("clicked")
+        new_produkt = {"name": new_produkt.name.data, "price": new_produkt.price_per_month.data, "description": new_produkt.description.data}
+        db_product.add_product(new_produkt)
+        return redirect(url_for('edit_products_page'))
+    return render_template('all_products.html', new_produkt = new_produkt, products = products)
 
 
 @app.route('/base', methods=['GET', 'POST'])
@@ -140,11 +142,16 @@ def base_page():
 
 
 
-@app.route('/admin/edit_product/<id>', methods=['GET', 'POST'])
+@app.route('/admin/edit_product/<id>', methods=['GET', 'POST'])#TODO tady jsem skoncil pokracovat na editaci produktu
 @login_required
 @role_required("admin")
 def edit_product(id):
-
+    edited_product = EditProductForm()
+    product = db_product.get_product_by_name(id)
+    if edit_product.validate_on_submit():
+        edited_product = {"name": edited_product.name.data, "price": edited_product.price_per_month.data, "description": edited_product.description.data}
+        db_product.update_product(id, edited_product)
+        return redirect(url_for('edit_products_page'))
     return render_template('edit_product.html', product = product, form = edited_product)
 
 
@@ -161,21 +168,19 @@ def delete_product(id):
         else: return redirect(url_for('edit_products_page'))
     return render_template('delete_product.html', product = product , form = form)
 
-# @app.route('/test', methods=['GET', 'POST'])
-# def test_page():
-#     form_login = LoginForm()
-#     register_form = RegisterForm()
-#     if form_login.validate_on_submit():
-#         cprint("validace form_login v poradku clicked")
-#     if register_form.validate_on_submit():
-#         cprint("validace register_form v poradku clicked")
     
-#     return render_template('form_testing.html',
-#                             form_login = form_login,
-#                             form_register = register_form,
-#                             login_error = form_login.errors,
-#                             register_error = register_form.errors)
+    return render_template('form_testing.html',
+                            form_login = form_login,
+                            form_register = register_form,
+                            login_error = form_login.errors,
+                            register_error = register_form.errors)
 
+@app.route('/login_test_user', methods=['GET', 'POST'])
+def login_test_user():
+    # current_user = User("63fcd26ca100a2f4d6e56d18")#test user
+    current_user = User("63fcd1d350ed7141f41f1a17")#admin
+    login_user(current_user)
+    return redirect(url_for('index_page'))
 
 
 if __name__ == '__main__':
