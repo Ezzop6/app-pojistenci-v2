@@ -5,15 +5,20 @@
 <h1>Edit product</h1>
 {{ product }}
 
-<h1>toto je stranka pro adminy na editaci produktu</h1>
+<h1>toto je stranka pro adminy na editaci produktu:{{ product['name'] }}</h1>
 <form method="post">
     {{ form.csrf_token }}
-    {{ form.name }}
+
     {{ form.description }}
     {{ form.price_per_month }}
     <input type="submit">
     <hr>
-    {{ error }}
 </form>
+{% for field, errors in form.errors.items() %}
+<div class="alert alert-error">
+    {{ form[field].label }}: {{ ', '.join(errors) }}
+</div>
+    {% endfor %}
+
 
 {% endblock %}

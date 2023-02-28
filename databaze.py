@@ -111,5 +111,13 @@ class DbProducts(DbConnection):
     def delete_product(self, produkt_name):
         self.db.delete_one({"name": produkt_name})
         
-
+    def get_product_id(self,product_name):
+        return self.db.find_one({"name": product_name})["_id"]
+    
+    def update_product(self,product_name,description,price_per_month):
+        cprint(product_name)
+        cprint(description)
+        cprint(price_per_month)
+        self.db.update_one({"name": product_name}, {"$set": {"description": description, "price": price_per_month}})
+        
     

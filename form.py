@@ -15,7 +15,7 @@ class CustomTest:
         for letter in data:
             if letter in forrbiden_letters:
                 return True
-            
+    @staticmethod        
     def contains_digit(data):
         for letter in data:
             if letter.isdigit():
@@ -122,7 +122,7 @@ class LoginForm(FlaskForm):
         if not db_user.check_if_password_is_correct(login, password):
             raise ValidationError("Špatné heslo")
 
-class EditProductForm(FlaskForm):
+class EditProductsForm(FlaskForm):
     name = StringField("Název", widget = widgets.Input(input_type = "text"),
         render_kw = {"placeholder": "Název"},
         validators = [validators.DataRequired(message="Musíte zadat název produktu"),
@@ -148,6 +148,21 @@ class EditProductForm(FlaskForm):
         if db_product.check_if_name_exists(name) != None:
             raise ValidationError(f"Produkt s názvem {name} již existuje")
         
+class EditProduct(FlaskForm):
+    description = TextAreaField("Popis", widget = widgets.TextArea(),
+        render_kw = {"placeholder": "Popis"},
+        validators = [validators.DataRequired(message="Musíte zadat popis produktu"),
+                    validators.Length(min=20, max=666, message="Popis musí mít 20 až 666 znaků")])
+    price_per_month = IntegerField("Cena za měsíc", widget = widgets.Input(input_type = "number"),
+        render_kw = {"placeholder": "Cena za měsíc"},
+        validators = [validators.DataRequired(message="Musíte zadat cenu za měsíc")])
+    submit = SubmitField("Potvrdit")
+    
+    def validate_price_per_month(self, price_per_month):
+        price_per_month = price_per_month.data
+        if price_per_month < 0:
+            raise ValidationError(f"Cena za měsíc musí být kladná: {price_per_month}")
+    
 class YesNoForm(FlaskForm):
     yes = SubmitField("Ano")
     no = SubmitField("Ne")

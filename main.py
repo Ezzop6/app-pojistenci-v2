@@ -124,7 +124,7 @@ def admin_page():
 @login_required
 @role_required("admin")
 def edit_products_page():
-    new_produkt = EditProductForm()
+    new_produkt = EditProductsForm()
     products = db_product.get_all_products()
     if new_produkt.validate_on_submit():
         cprint("clicked")
@@ -146,11 +146,12 @@ def base_page():
 @login_required
 @role_required("admin")
 def edit_product(id):
-    edited_product = EditProductForm()
+    edited_product = EditProduct()
     product = db_product.get_product_by_name(id)
-    if edit_product.validate_on_submit():
-        edited_product = {"name": edited_product.name.data, "price": edited_product.price_per_month.data, "description": edited_product.description.data}
-        db_product.update_product(id, edited_product)
+    edited_product.description.render_kw = {"placeholder": product["description"]}
+    edited_product.price_per_month.render_kw = {"placeholder": product["price"]}
+    if edited_product.validate_on_submit():
+        db_product.update_product(id, edited_product.description.data, edited_product.price_per_month.data)
         return redirect(url_for('edit_products_page'))
     return render_template('edit_product.html', product = product, form = edited_product)
 
@@ -168,12 +169,7 @@ def delete_product(id):
         else: return redirect(url_for('edit_products_page'))
     return render_template('delete_product.html', product = product , form = form)
 
-    
-    return render_template('form_testing.html',
-                            form_login = form_login,
-                            form_register = register_form,
-                            login_error = form_login.errors,
-                            register_error = register_form.errors)
+
 
 @app.route('/login_test_user', methods=['GET', 'POST'])
 def login_test_user():
