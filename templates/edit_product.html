@@ -8,7 +8,6 @@
 <h1>toto je stranka pro adminy na editaci produktu:{{ product['name'] }}</h1>
 <form method="post">
     {{ form.csrf_token }}
-
     {{ form.description }}
     {{ form.price_per_month }}
     <input type="submit">

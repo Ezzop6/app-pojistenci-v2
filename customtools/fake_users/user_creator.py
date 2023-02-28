@@ -26,6 +26,7 @@ class RandomUser:
         random_delta = timedelta(days=randint(0, delta.days))
         random_date = start_date + random_delta
         self.birth_date = random_date.strftime("%Y.%m.%d")
+        self.birth_date = self.birth_date.replace(".","-")
 
     def nastav_rodne_cislo(self):
         year = self.birth_date[0:4]

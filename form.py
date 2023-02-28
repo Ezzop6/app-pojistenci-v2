@@ -6,7 +6,7 @@ import datetime
 db_user = DbUsers()
 db_product = DbProducts()
 
-forbidden_words = ["admin","root","administrator"]
+forbidden_words = ["admin","root","administrator"] # forbidden words in name, surname and login
 forrbiden_letters = "!@#$%^&*()_+{}|:<>?/.,;'[]\=-`~"
 
 class CustomTest:
@@ -166,4 +166,14 @@ class EditProduct(FlaskForm):
 class YesNoForm(FlaskForm):
     yes = SubmitField("Ano")
     no = SubmitField("Ne")
+    
+class AddFakeUserForm(FlaskForm):
+    number_users = IntegerField("Kolik", widget = widgets.Input(input_type = "number"),default=1,
+        render_kw = {"placeholder": "Kolik uzivatelu"})
+    submit = SubmitField("Potvrdit")
+    
+    def validate_number_users(self, number_users):
+        number_users = number_users.data
+        if number_users > 100:
+            raise ValidationError(f"Jo jde to ale bude to trvat dlouho proto jsem to od tud zakazal povoleno je max 100: {number_users}")
     

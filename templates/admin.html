@@ -3,7 +3,17 @@
 
 
 {% block content %}
-<h1>Stranka pouze pro adminy</h1>
-
+<h1>Stranka pro adminy</h1>
+<form method="post">
+    {{ fake_user_generator.csrf_token }}
+    {{ fake_user_generator.number_users }}
+    <input type="submit">
+    <hr>
+</form>
+{% for field, errors in fake_user_generator.errors.items() %}
+<div class="alert alert-error">
+    {{ fake_user_generator[field].label }}: {{ ', '.join(errors) }}
+</div>
+    {% endfor %}
 
 {% endblock %}

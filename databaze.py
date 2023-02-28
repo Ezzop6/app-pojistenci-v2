@@ -3,10 +3,6 @@ import os
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from customtools.fake_users.user_creator import RandomUser
-
-
-
-
 from customtools.tools import *
 
 
@@ -20,6 +16,7 @@ class DbConnection:
         
 class DbUsers(DbConnection):
     def __init__(self):
+        
         super().__init__()
         self.db = self.client.pojistenci_uzivatele.users
         
@@ -53,6 +50,7 @@ class DbUsers(DbConnection):
         return role["role"]
     
     def get_user_id(self,login):
+        '''Returns user id'''
         id = self.db.find_one({"login": login})
         return id["_id"]
         
@@ -71,7 +69,7 @@ class DbUsers(DbConnection):
     
     def update_user_birthdate(self, user_id, birthdate):
         '''Updates user birthdate'''
-        self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {"birthdate": birthdate}})
+        self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {"birth_date": birthdate.strftime('%Y-%m-%d')}})
         
     def update_user_address(self, user_id, address):
         '''Updates user address'''
@@ -105,19 +103,20 @@ class DbProducts(DbConnection):
             return True
     
     def get_product_by_name(self,produkt_name):
+        '''Returns product by name'''
         produkt = self.db.find_one({"name": produkt_name})
         return produkt
     
     def delete_product(self, produkt_name):
+        '''Deletes product by name'''
         self.db.delete_one({"name": produkt_name})
         
     def get_product_id(self,product_name):
+        '''Returns product id'''
         return self.db.find_one({"name": product_name})["_id"]
     
     def update_product(self,product_name,description,price_per_month):
-        cprint(product_name)
-        cprint(description)
-        cprint(price_per_month)
+        '''Updates product description and price by name'''
         self.db.update_one({"name": product_name}, {"$set": {"description": description, "price": price_per_month}})
         
     

@@ -11,7 +11,7 @@ from customtools.vtipky import error_page_joke
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = random_secret_key()
-app.config['PERMANENT_SESSION_LIFETIME'] = 60000
+app.config['PERMANENT_SESSION_LIFETIME'] = 60000 # time to logout user
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -89,7 +89,6 @@ def register_page():
         return redirect(url_for('complete_registration', login = form_register.login.data))
     return render_template('register.html',form_register = form_register)
 
-# TODO doresit cas nefunguje birthdate
 @app.route('/register/<login>', methods=['GET', 'POST'])
 @login_required
 @role_required("user")
@@ -97,16 +96,13 @@ def complete_registration(login):
     form_complete_register = CompleteRegisterForm()
     if form_complete_register.validate_on_submit():
         user_id = db_user.get_user_id(login)
-        cprint(user_id)
         db_user.update_user_name(user_id, form_complete_register.name.data)
         db_user.update_user_surname(user_id, form_complete_register.surname.data)
         db_user.update_user_birthdate(user_id, form_complete_register.birt_date.data)
-        cprint("validace v poradku clicked") 
     return render_template('complete_registration.html', 
                         login = login, 
                         user = db_user.get_user_data(current_user.id), 
                         form_complete_register = form_complete_register)
-
 
 @app.route('/user', methods=['GET', 'POST'])
 @login_required
@@ -118,7 +114,10 @@ def user_page():
 @login_required
 @role_required("admin")
 def admin_page():
-    return render_template('admin.html')
+    fake_user_generator = AddFakeUserForm()
+    if fake_user_generator.validate_on_submit():
+        db_user.create_fake_users(fake_user_generator.number_users.data)
+    return render_template('admin.html', fake_user_generator = fake_user_generator)
 
 @app.route('/admin/edit_product', methods=['GET', 'POST'])
 @login_required
@@ -133,14 +132,10 @@ def edit_products_page():
         return redirect(url_for('edit_products_page'))
     return render_template('all_products.html', new_produkt = new_produkt, products = products)
 
-
 @app.route('/base', methods=['GET', 'POST'])
 def base_page():
     '''Tato stranka je pouze pro testovani'''
     return render_template('base.html')
-
-
-
 
 @app.route('/admin/edit_product/<id>', methods=['GET', 'POST'])#TODO tady jsem skoncil pokracovat na editaci produktu
 @login_required
@@ -155,7 +150,6 @@ def edit_product(id):
         return redirect(url_for('edit_products_page'))
     return render_template('edit_product.html', product = product, form = edited_product)
 
-
 @app.route('/admin/delete/<id>', methods=['GET', 'POST'])
 @login_required
 @role_required("admin")
@@ -169,14 +163,18 @@ def delete_product(id):
         else: return redirect(url_for('edit_products_page'))
     return render_template('delete_product.html', product = product , form = form)
 
-
-
 @app.route('/login_test_user', methods=['GET', 'POST'])
 def login_test_user():
     # current_user = User("63fcd26ca100a2f4d6e56d18")#test user
     current_user = User("63fcd1d350ed7141f41f1a17")#admin
     login_user(current_user)
     return redirect(url_for('index_page'))
+
+@app.route('/admin/fake_user', methods=['GET', 'POST'])
+@login_required
+@role_required("admin")
+def fake_user():
+    return render_template('admin.html')
 
 
 if __name__ == '__main__':
