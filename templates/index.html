@@ -4,4 +4,15 @@
 
 {% block content %}
 
+{% if current_user.is_authenticated %}
+nejaka stilizace pro prihlasene uzivatele
+{% endif %}
+
+{% if not current_user.is_authenticated %}
+nejaka stilizace pro neprihlasene uzivatele asi tedy bude nejaka reklama na produkty
+
+{% endif %}
+
+
+
 {% endblock %}

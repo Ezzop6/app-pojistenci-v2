@@ -11,8 +11,8 @@
     {{ form.description }}
     {{ form.price_per_month }}
     <input type="submit">
-    <hr>
 </form>
+<hr>
 {% for field, errors in form.errors.items() %}
 <div class="alert alert-error">
     {{ form[field].label }}: {{ ', '.join(errors) }}

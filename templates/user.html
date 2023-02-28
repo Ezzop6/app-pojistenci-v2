@@ -1,9 +1,30 @@
 {% extends 'base.html' %}
-{% block title %}Ahoj {{user['login']}}{% endblock %}
+{% block title %}Ahoj {{ user['login'] }}{% endblock %}
 
 
 {% block content %}
 <h1>toto je stranka uzivatele</h1>
 <br/>
 {{user}}
+<br/>
+<form method="post">
+    {{ user_form.csrf_token }}
+    {{ user_form.name }}
+    {{ user_form.surname }}
+    {{ user_form.password }}
+    {{ user_form.password2 }}
+    {{ user_form.city }}
+    {{ user_form.street }}
+    {{ user_form.street_number }}
+    {{ user_form.zip_code }}
+    {{ user_form.email }}
+    <input type="submit">
+</form>
+<hr>
+{% for field, errors in user_form.errors.items() %}
+<div class="alert alert-error">
+    {{ user_form[field].label }}: {{ ', '.join(errors) }}
+</div>
+    {% endfor %}
+
 {% endblock %}

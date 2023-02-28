@@ -34,7 +34,6 @@ class DbUsers(DbConnection):
         '''Checks if password is correct'''
         if self.db.count_documents({"login": login, "password": password}) > 0:
             return True
-    
         
     def add_user(self, login,password):
         '''Adds user to database'''
@@ -59,6 +58,11 @@ class DbUsers(DbConnection):
         user = self.db.find_one({"_id": ObjectId(user_id)})
         return user
     
+    def get_user_login(self, user_id):
+        '''Returns user login'''
+        login = self.db.find_one({"_id": ObjectId(user_id)})
+        return login["login"]
+    
     def update_user_name(self, user_id, name):
         '''Updates user name'''
         self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {"name": name}})
@@ -75,9 +79,9 @@ class DbUsers(DbConnection):
         '''Updates user address'''
         self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {"address": address}})
         
-    def create_fake_users(self, number = 1):
+    def create_fake_users(self, number_of_users = 1):
         '''Creates fake users'''
-        for _ in range(number):
+        for _ in range(number_of_users):
             fake_users = RandomUser().new_user()
             if not self.check_if_login_exists(fake_users["login"]):
                 self.db.insert_one(fake_users)
@@ -119,4 +123,7 @@ class DbProducts(DbConnection):
         '''Updates product description and price by name'''
         self.db.update_one({"name": product_name}, {"$set": {"description": description, "price": price_per_month}})
         
-    
+class DbUsersProducts(DbConnection):
+    def __init__(self):
+        super().__init__()
+        self.db = self.client.pojistenci_uzivatele.users_product

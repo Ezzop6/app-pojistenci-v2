@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, TextAreaField, IntegerField ,widgets, StringField, PasswordField, SubmitField, DateField, validators,ValidationError
+from wtforms import  TextAreaField, IntegerField ,widgets, StringField, PasswordField, SubmitField, DateField, validators,ValidationError
 from databaze import DbUsers, DbProducts
 import datetime
 
@@ -175,5 +175,39 @@ class AddFakeUserForm(FlaskForm):
     def validate_number_users(self, number_users):
         number_users = number_users.data
         if number_users > 100:
-            raise ValidationError(f"Jo jde to ale bude to trvat dlouho proto jsem to od tud zakazal povoleno je max 100: {number_users}")
+            raise ValidationError(f"Povoleno je max 100 : {number_users}")
+        
+class EditUserDataForm(FlaskForm):
+    name = StringField("Jméno", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "Jméno"},
+        validators = [validators.DataRequired(message="Musíte zadat jméno"),
+                    validators.Length(min=2, max=20, message="Jméno musí mít 2 až 20 znaků")])
+    surname = StringField("Příjmení", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "Příjmení"},
+        validators = [validators.DataRequired(message="Musíte zadat příjmení"),
+                    validators.Length(min=2, max=20, message="Příjmení musí mít 2 až 20 znaků")])
+    password = PasswordField("Heslo", widget=widgets.Input(input_type = "password"),
+        render_kw = {"placeholder": "Heslo"}, 
+        validators = [validators.DataRequired(message="Musíte zadat heslo")])
+    password2 = PasswordField("Zopakujte heslo", widget = widgets.Input(input_type = "password"),
+        render_kw={"placeholder": "Zopakujte heslo"},
+        validators=[validators.DataRequired(message="Musíte zadat heslo")])
+    city = StringField("Město", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "Město"},
+        validators = [validators.DataRequired(message="Musíte zadat město")])
+    street = StringField("Ulice", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "Ulice"},
+        validators=[validators.DataRequired(message="Musíte zadat ulici")])
+    street_number = StringField("Číslo popisné", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "Číslo popisné"},
+        validators = [validators.DataRequired(message="Musíte zadat číslo popisné")])
+    zip_code = StringField("PSČ", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "PSČ"},
+        validators = [validators.DataRequired(message="Musíte zadat PSČ")])
+    email = StringField("Email", widget = widgets.Input(input_type = "email"),
+        render_kw = {"placeholder": "Email"},
+        validators = [validators.DataRequired(message="Musíte zadat email")])
+    submit = SubmitField("Uložit")
+    
+    pass
     

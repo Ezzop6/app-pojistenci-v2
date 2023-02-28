@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, g, session, abort
 from flask_login import current_user, login_required, LoginManager, UserMixin, login_user, logout_user
 import os
-from databaze import DbUsers, DbProducts
+from databaze import DbUsers, DbProducts, DbUsersProducts
 from functools import wraps
 
 from form import *
@@ -17,11 +17,12 @@ login_manager.init_app(app)
 
 db_user = DbUsers()
 db_product = DbProducts()
-
+db_up = DbUsersProducts()
 class User(UserMixin):
     def __init__(self, login):
         self.id = login
         self.role = db_user.get_user_role(login)
+        self.login = db_user.get_user_login(login)
 
 def role_required(role):
     '''Requires login with the specified role '''
@@ -87,7 +88,8 @@ def register_page():
         current_user = User(user_id)
         login_user(current_user)
         return redirect(url_for('complete_registration', login = form_register.login.data))
-    return render_template('register.html',form_register = form_register)
+    return render_template('register.html',
+                        form_register = form_register)
 
 @app.route('/register/<login>', methods=['GET', 'POST'])
 @login_required
@@ -99,16 +101,22 @@ def complete_registration(login):
         db_user.update_user_name(user_id, form_complete_register.name.data)
         db_user.update_user_surname(user_id, form_complete_register.surname.data)
         db_user.update_user_birthdate(user_id, form_complete_register.birt_date.data)
+        return redirect(url_for('index_page'))
     return render_template('complete_registration.html', 
                         login = login, 
                         user = db_user.get_user_data(current_user.id), 
                         form_complete_register = form_complete_register)
 
-@app.route('/user', methods=['GET', 'POST'])
+@app.route('/user/<login>', methods=['GET', 'POST'])
 @login_required
 @role_required("user")
-def user_page():
-    return render_template('user.html',user = db_user.get_user_data(current_user.id))
+def user_page(login):
+    user_form = EditUserDataForm()
+    if user_form.validate_on_submit():
+        return redirect(url_for('user_page', login = login))
+    return render_template('user.html', 
+                        user = db_user.get_user_data(current_user.id),
+                        user_form = user_form)
 
 @app.route('/admin', methods=['GET', 'POST'])
 @login_required
@@ -163,10 +171,16 @@ def delete_product(id):
         else: return redirect(url_for('edit_products_page'))
     return render_template('delete_product.html', product = product , form = form)
 
+
+# TODO remove this after development
 @app.route('/login_test_user', methods=['GET', 'POST'])
 def login_test_user():
-    # current_user = User("63fcd26ca100a2f4d6e56d18")#test user
-    current_user = User("63fcd1d350ed7141f41f1a17")#admin
+    '''only for testing delete it after development'''
+    log_this_account = 'admin'
+    if log_this_account == 'user':
+        current_user = User("63fdba6ee32d2888e837368a")#test user
+    if log_this_account == 'admin':
+        current_user = User("63fcd1d350ed7141f41f1a17")#admin
     login_user(current_user)
     return redirect(url_for('index_page'))
 
@@ -180,5 +194,5 @@ def fake_user():
 if __name__ == '__main__':
     host = os.getenv('IP', '0.0.0.0')
     port = int(os.getenv('PORT', 5000))
-    app.debug = True
+    app.debug = True #TODO remove this after development
     app.run(host=host, port=port)

@@ -38,8 +38,9 @@
                     {% endif %}
                     {% if current_user.is_authenticated %}
                     <li class="menu_item"><a href="{{ url_for('logout') }}">Odhlášení</a></li>
-                    <li class="menu_item"><a href="{{ url_for('user_page') }}">Můj účet</a></li>
+                    <li class="menu_item"><a href="{{ url_for('user_page',login = current_user.login) }}">Můj účet</a></li>
                     {% endif %}
+                    <!--TODO:remove this after development-->
                     <li class="menu_item"><a href="{{ url_for('login_test_user') }}">login_test_user</a></li>
 
                 </ul>
