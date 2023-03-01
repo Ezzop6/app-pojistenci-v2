@@ -10,7 +10,7 @@ Naklonujte si projekt z GitHubu:
 
 pro funkcnost je treba soubor .env s heslem pro pripojeni k databazi
 
-git clone TODO: add link
+git clone https://github.com/Ezzop6/app-pojistenci-v2.git/
 
 pip install -r requirements.txt
 
