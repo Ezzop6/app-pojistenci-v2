@@ -35,6 +35,7 @@ def role_required(role):
         return decorated_function
     return decorator
 
+'''error pages'''
 @app.errorhandler(404)
 def access_denied(error):
     message = error_page_joke("404")
@@ -52,6 +53,7 @@ def access_denied(error):
 
 @login_manager.user_loader
 def load_user(user_id):
+    '''Callback to reload the user object from the user ID stored in the session'''
     return User(user_id)
 
 @app.before_request
@@ -67,10 +69,12 @@ def logout():
 
 @app.route('/')
 def index_page():
+    '''Main page'''
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
+    '''Login page'''
     form_login = LoginForm()
     if form_login.validate_on_submit():
         user_id = db_user.get_user_id(form_login.login.data)
@@ -81,6 +85,7 @@ def login_page():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
+    '''Register page'''
     form_register = RegisterForm()
     if form_register.validate_on_submit():
         db_user.add_user(form_register.login.data, form_register.password.data)
@@ -95,6 +100,7 @@ def register_page():
 @login_required
 @role_required("user")
 def complete_registration(login):
+    '''Complete registration page'''
     form_complete_register = CompleteRegisterForm()
     if form_complete_register.validate_on_submit():
         user_id = db_user.get_user_id(login)
@@ -111,6 +117,7 @@ def complete_registration(login):
 @login_required
 @role_required("user")
 def user_page(login):
+    '''User page with user data and products'''
     user_form = EditUserDataForm()
     if user_form.validate_on_submit():
         return redirect(url_for('user_page', login = login))
@@ -122,6 +129,7 @@ def user_page(login):
 @login_required
 @role_required("admin")
 def admin_page():
+    '''Admin page with fake user generator'''
     fake_user_generator = AddFakeUserForm()
     if fake_user_generator.validate_on_submit():
         db_user.create_fake_users(fake_user_generator.number_users.data)
@@ -131,6 +139,8 @@ def admin_page():
 @login_required
 @role_required("admin")
 def edit_products_page():
+    '''Admin page with products and form for adding new products
+    edited products are saved to database'''
     new_produkt = EditProductsForm()
     products = db_product.get_all_products()
     if new_produkt.validate_on_submit():
@@ -142,13 +152,14 @@ def edit_products_page():
 
 @app.route('/base', methods=['GET', 'POST'])
 def base_page():
-    '''Tato stranka je pouze pro testovani'''
+    '''base page for testing purposes'''
     return render_template('base.html')
 
 @app.route('/admin/edit_product/<id>', methods=['GET', 'POST'])#TODO tady jsem skoncil pokracovat na editaci produktu
 @login_required
 @role_required("admin")
 def edit_product(id):
+    '''Admin page with form for editing products'''
     edited_product = EditProduct()
     product = db_product.get_product_by_name(id)
     edited_product.description.render_kw = {"placeholder": product["description"]}
@@ -162,6 +173,7 @@ def edit_product(id):
 @login_required
 @role_required("admin")
 def delete_product(id):
+    '''delete product page with confirmation'''
     form = YesNoForm()
     product = db_product.get_product_by_name(id)
     if form.validate_on_submit():
@@ -184,11 +196,6 @@ def login_test_user():
     login_user(current_user)
     return redirect(url_for('index_page'))
 
-@app.route('/admin/fake_user', methods=['GET', 'POST'])
-@login_required
-@role_required("admin")
-def fake_user():
-    return render_template('admin.html')
 
 
 if __name__ == '__main__':
