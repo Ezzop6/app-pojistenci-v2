@@ -155,7 +155,7 @@ def base_page():
     '''base page for testing purposes'''
     return render_template('base.html')
 
-@app.route('/admin/edit_product/<id>', methods=['GET', 'POST'])#TODO tady jsem skoncil pokracovat na editaci produktu
+@app.route('/admin/edit_product/<id>', methods=['GET', 'POST'])
 @login_required
 @role_required("admin")
 def edit_product(id):

@@ -10,7 +10,7 @@ Naklonujte si projekt z GitHubu:
 
 pro funkcnost je treba soubor .env s heslem pro pripojeni k databazi
 
-git clone https://github.com/vaserepo/nazev-aplikace.git
+git clone TODO: add link
 
 pip install -r requirements.txt
 
