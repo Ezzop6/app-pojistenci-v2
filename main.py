@@ -132,7 +132,7 @@ def user_page(login):
 
     if request.method == 'POST' and 'change_password_form' in request.form:
         if change_password_form.validate_on_submit():
-            db_user.update_user_password(current_user.id, form, data)
+            db_user.update_user_data(current_user.id, "password", change_password_form.password.data)
 
     return render_template('user.html', 
                         user=db_user.get_user_data(current_user.id),
@@ -203,7 +203,7 @@ def delete_product(id):
 @app.route('/login_test_user', methods=['GET', 'POST'])
 def login_test_user():
     '''only for testing delete it after development'''
-    log_this_account = 'admin'
+    log_this_account = 'user'
     if log_this_account == 'user':
         current_user = User("63fdba6ee32d2888e837368a")#test user
     if log_this_account == 'admin':
