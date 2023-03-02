@@ -11,14 +11,12 @@
     {{ user_form.csrf_token }}
     {{ user_form.name }}
     {{ user_form.surname }}
-    {{ user_form.password }}
-    {{ user_form.password2 }}
     {{ user_form.city }}
     {{ user_form.street }}
     {{ user_form.street_number }}
     {{ user_form.zip_code }}
     {{ user_form.email }}
-    <input type="submit">
+    <input name="user_form" value="Uprav změněné" type="submit">
 </form>
 <hr>
 {% for field, errors in user_form.errors.items() %}
@@ -26,5 +24,19 @@
     {{ user_form[field].label }}: {{ ', '.join(errors) }}
 </div>
     {% endfor %}
+<form method="post">
+    {{ change_password_form.csrf_token }}
+    {{ change_password_form.password }}
+    {{ change_password_form.password2 }}
+    <input name="change_password_form" value="Změnit heslo" type="submit">
+</form>
+<hr>
+{% for field, errors in change_password_form.errors.items() %}
+<div class="alert alert-error">
+    {{ change_password_form[field].label }}: {{ ', '.join(errors) }}
+</div>
+    {% endfor %}
+    
+
 
 {% endblock %}

@@ -119,11 +119,26 @@ def complete_registration(login):
 def user_page(login):
     '''User page with user data and products'''
     user_form = EditUserDataForm()
-    if user_form.validate_on_submit():
-        return redirect(url_for('user_page', login = login))
+    change_password_form = ChangePasswordForm()
+
+    if request.method == 'POST' and 'user_form' in request.form:
+        if user_form.validate_on_submit():
+            for form, data in user_form.data.items():
+                if form == "csrf_token" or form == "submit":
+                    continue
+                if data != "":
+                    db_user.update_user_data(current_user.id, form, data)
+            return redirect(url_for('user_page', login=login))
+
+    if request.method == 'POST' and 'change_password_form' in request.form:
+        if change_password_form.validate_on_submit():
+            db_user.update_user_password(current_user.id, form, data)
+
     return render_template('user.html', 
-                        user = db_user.get_user_data(current_user.id),
-                        user_form = user_form)
+                        user=db_user.get_user_data(current_user.id),
+                        user_form=user_form,
+                        change_password_form=change_password_form)
+
 
 @app.route('/admin', methods=['GET', 'POST'])
 @login_required

@@ -39,9 +39,9 @@ class DbUsers(DbConnection):
         '''Adds user to database'''
         if not self.check_if_login_exists({"login": login}):
             self.db.insert_one({"login": login, "password": password, "role": "user"})
-            print(f"User {login} added")
+            cprint(f"User {login} added")
         else:
-            print(f"User {login} already exists")
+            cprint(f"User {login} already exists")
     
     def get_user_role(self, user_id):
         '''Returns user role'''
@@ -62,6 +62,11 @@ class DbUsers(DbConnection):
         '''Returns user login'''
         login = self.db.find_one({"_id": ObjectId(user_id)})
         return login["login"]
+    
+    def update_user_data(self, user_id, update, update_value):
+        '''Updates user data'''
+        self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {update: update_value}})
+        # cprint(f"User {user_id} updated with {update} = {update_value}")
     
     def update_user_name(self, user_id, name):
         '''Updates user name'''

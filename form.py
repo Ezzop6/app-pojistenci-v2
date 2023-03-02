@@ -20,6 +20,39 @@ class CustomTest:
         for letter in data:
             if letter.isdigit():
                 return True
+            
+    @staticmethod
+    def validate_password(password, password2):
+        password = password.data
+        special_characters = "!@#$%^&*()_+|:<>?[]\;',./`~ěščřžýáíéúůťďňóĚŠČŘŽÝÁÍÉÚŮŤĎŇÓ"
+        min_length = 8
+        digit = sum(1 for letter in password if letter.isdigit())
+        special = sum(1 for letter in password if letter in special_characters)
+        small_letter = sum(1 for letter in password if letter.islower())
+        big_letter = sum(1 for letter in password if letter.isupper())
+        
+        if min_length > len(password):
+            raise ValidationError(f"Heslo musí mít minimálně {min_length} znaků")
+        elif digit == 0:
+            raise ValidationError("Heslo musí obsahovat alespoň jedno číslo")
+        elif special == 0:
+            raise ValidationError("Heslo musí obsahovat alespoň jeden speciální znak")
+        elif small_letter == 0:
+            raise ValidationError("Heslo musí obsahovat alespoň jedno malé písmeno")
+        elif big_letter == 0:
+            raise ValidationError("Heslo musí obsahovat alespoň jedno velké písmeno")
+        elif password != password2:
+            raise ValidationError("Hesla se neshodují")
+        
+    @staticmethod
+    def validate_name(name):
+        name = name.data
+        if name in forbidden_words:
+            raise ValidationError(f"nesmíš použít toto jméno: {name}")
+        if CustomTest.contains_rorbidden_letters(name):
+            raise ValidationError(f"nesmíš použít tyto znaky v jménu: {forrbiden_letters}")
+        if CustomTest.contains_digit(name):
+            raise ValidationError(f"nesmíš použít číslice v jménu: {name}")
     
 class CompleteRegisterForm(FlaskForm):
     name = StringField("Jméno", widget = widgets.Input(input_type = "text"),
@@ -36,22 +69,10 @@ class CompleteRegisterForm(FlaskForm):
     submit = SubmitField("Uložit")
     
     def validate_name(self, name):
-        name = name.data
-        if name in forbidden_words:
-            raise ValidationError(f"nesmíš použít toto jméno: {name}")
-        if CustomTest.contains_rorbidden_letters(name):
-            raise ValidationError(f"nesmíš použít tyto znaky v jménu: {forrbiden_letters}")
-        if CustomTest.contains_digit(name):
-            raise ValidationError(f"nesmíš použít číslice v jménu: {name}")
+        CustomTest.validate_name(name)
         
     def validate_surname(self, surname):
-        surname = surname.data
-        if surname in forbidden_words:
-            raise ValidationError(f"nesmíš použít toto příjmení: {surname}")
-        if CustomTest.contains_rorbidden_letters(surname):
-            raise ValidationError(f"nesmíš použít tyto znaky v  příjmení: {forrbiden_letters}")
-        if CustomTest.contains_digit(surname):
-            raise ValidationError(f"nesmíš použít číslice v příjmení: {surname}")
+        CustomTest.validate_name(surname)
         
     def validate_birt_date(self, birt_date):
         birt_date = birt_date.data
@@ -79,26 +100,7 @@ class RegisterForm(FlaskForm):
             raise ValidationError(f"Uživatel s loginem {login} již existuje")
     
     def validate_password(self, password):
-        password = password.data
-        special_characters = "!@#$%^&*()_+|:<>?[]\;',./`~ěščřžýáíéúůťďňóĚŠČŘŽÝÁÍÉÚŮŤĎŇÓ"
-        min_length = 8
-        digit = sum(1 for letter in password if letter.isdigit())
-        special = sum(1 for letter in password if letter in special_characters)
-        small_letter = sum(1 for letter in password if letter.islower())
-        big_letter = sum(1 for letter in password if letter.isupper())
-        
-        if min_length > len(password):
-            raise ValidationError(f"Heslo musí mít minimálně {min_length} znaků")
-        elif digit == 0:
-            raise ValidationError("Heslo musí obsahovat alespoň jedno číslo")
-        elif special == 0:
-            raise ValidationError("Heslo musí obsahovat alespoň jeden speciální znak")
-        elif small_letter == 0:
-            raise ValidationError("Heslo musí obsahovat alespoň jedno malé písmeno")
-        elif big_letter == 0:
-            raise ValidationError("Heslo musí obsahovat alespoň jedno velké písmeno")
-        elif password != self.password2.data:
-            raise ValidationError("Hesla se neshodují")
+        CustomTest.validate_password(password, self.password2.data)
         
 class LoginForm(FlaskForm):
     login = StringField("Login", widget = widgets.Input(input_type = "text"),
@@ -120,7 +122,7 @@ class LoginForm(FlaskForm):
         login = self.login.data
         password = password.data
         if not db_user.check_if_password_is_correct(login, password):
-            raise ValidationError("Špatné heslo")
+            raise ValidationError("Špatné jméno nebo heslo")
 
 class EditProductsForm(FlaskForm):
     name = StringField("Název", widget = widgets.Input(input_type = "text"),
@@ -179,35 +181,28 @@ class AddFakeUserForm(FlaskForm):
         
 class EditUserDataForm(FlaskForm):
     name = StringField("Jméno", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Jméno"},
-        validators = [validators.DataRequired(message="Musíte zadat jméno"),
-                    validators.Length(min=2, max=20, message="Jméno musí mít 2 až 20 znaků")])
+        render_kw = {"placeholder": "Jméno"})
     surname = StringField("Příjmení", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Příjmení"},
-        validators = [validators.DataRequired(message="Musíte zadat příjmení"),
-                    validators.Length(min=2, max=20, message="Příjmení musí mít 2 až 20 znaků")])
-    password = PasswordField("Heslo", widget=widgets.Input(input_type = "password"),
-        render_kw = {"placeholder": "Heslo"}, 
-        validators = [validators.DataRequired(message="Musíte zadat heslo")])
-    password2 = PasswordField("Zopakujte heslo", widget = widgets.Input(input_type = "password"),
-        render_kw={"placeholder": "Zopakujte heslo"},
-        validators=[validators.DataRequired(message="Musíte zadat heslo")])
+        render_kw = {"placeholder": "Příjmení"})
     city = StringField("Město", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Město"},
-        validators = [validators.DataRequired(message="Musíte zadat město")])
+        render_kw = {"placeholder": "Město"})
     street = StringField("Ulice", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Ulice"},
-        validators=[validators.DataRequired(message="Musíte zadat ulici")])
+        render_kw = {"placeholder": "Ulice"})
     street_number = StringField("Číslo popisné", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Číslo popisné"},
-        validators = [validators.DataRequired(message="Musíte zadat číslo popisné")])
+        render_kw = {"placeholder": "Číslo popisné"})
     zip_code = StringField("PSČ", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "PSČ"},
-        validators = [validators.DataRequired(message="Musíte zadat PSČ")])
+        render_kw = {"placeholder": "PSČ"})
     email = StringField("Email", widget = widgets.Input(input_type = "email"),
-        render_kw = {"placeholder": "Email"},
-        validators = [validators.DataRequired(message="Musíte zadat email")])
+        render_kw = {"placeholder": "Email"})
     submit = SubmitField("Uložit")
     
-    pass
+class ChangePasswordForm(FlaskForm):
+    password = PasswordField("Heslo", widget=widgets.Input(input_type = "password"),
+        render_kw = {"placeholder": "Heslo"})
+    password2 = PasswordField("Zopakujte heslo", widget = widgets.Input(input_type = "password"),
+        render_kw={"placeholder": "Zopakujte heslo"})
+    change_password = SubmitField("Uložit")
     
+    if password != "" or password2 != "":
+        def validate_password(self, password):
+            CustomTest.validate_password(password, self.password2.data)
