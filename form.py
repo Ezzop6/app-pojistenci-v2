@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import  TextAreaField, IntegerField ,widgets, StringField, PasswordField, SubmitField, DateField, validators,ValidationError
+from wtforms import  TextAreaField, IntegerField, SelectField ,widgets, StringField, PasswordField, SubmitField, DateField, validators,ValidationError
 from databaze import DbUsers, DbProducts
 import datetime
 
@@ -288,3 +288,7 @@ class ChangePasswordForm(FlaskForm):
     if password != "" or password2 != "":
         def validate_password(self, password):
             CustomTest.validate_password(password, self.password2.data)
+
+class EditUserRoleForm(FlaskForm):
+    role = SelectField("Role", choices = [("user", "user"), ("admin", "admin")])
+    submit = SubmitField("Uložit")

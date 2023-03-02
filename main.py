@@ -120,6 +120,8 @@ def user_page(login):
     '''User page with user data and products'''
     user_form = EditUserDataForm()
     change_password_form = ChangePasswordForm()
+    role_form = EditUserRoleForm()
+    
 
     if request.method == 'POST' and 'user_form' in request.form:
         if user_form.validate_on_submit():
@@ -135,9 +137,10 @@ def user_page(login):
             db_user.update_user_data(current_user.id, "password", change_password_form.password.data)
 
     return render_template('user.html', 
-                        user=db_user.get_user_data(current_user.id),
-                        user_form=user_form,
-                        change_password_form=change_password_form)
+                        user = db_user.get_user_data(current_user.id),
+                        user_form = user_form,
+                        role_form = role_form,
+                        change_password_form = change_password_form)
 
 
 @app.route('/admin', methods=['GET', 'POST'])
@@ -164,6 +167,60 @@ def edit_products_page():
         db_product.add_product(new_produkt)
         return redirect(url_for('edit_products_page'))
     return render_template('all_products.html', new_produkt = new_produkt, products = products)
+
+@app.route('/admin/edit_user', methods=['GET', 'POST'])
+@login_required
+@role_required("admin")
+def edit_users_page():
+    users = db_user.get_all_users()
+
+    return render_template('all_users.html', users = users)
+
+@app.route('/admin/edit_user/<id>', methods=['GET', 'POST'])
+@login_required
+@role_required("admin")
+def edit_user(id):
+    '''Admin page with form for editing users'''
+    user_form = EditUserDataForm()
+    change_password_form = ChangePasswordForm()
+    role_form = EditUserRoleForm()
+    user_id = id
+    
+    if request.method == 'POST' and 'user_form' in request.form:
+        if user_form.validate_on_submit():
+            for form, data in user_form.data.items():
+                if form == "csrf_token" or form == "submit":
+                    continue
+                if data != "":
+                    db_user.update_user_data(user_id, form, data)
+                    
+    if request.method == 'POST' and 'change_password_form' in request.form:
+        if change_password_form.validate_on_submit():
+            db_user.update_user_data(current_user.id, "password", change_password_form.password.data)
+
+    if request.method == 'POST' and 'change_role_form' in request.form:
+        if role_form.validate_on_submit():
+            db_user.update_user_data(user_id, "role", role_form.role.data)
+            cprint("Welcome new admin!")
+            
+    return render_template('user.html', user_form = user_form,
+                        change_password_form = change_password_form,
+                        role_form = role_form, 
+                        user = db_user.get_user_data(user_id))
+
+@app.route('/admin/edit_user/delete/<id>', methods=['GET', 'POST'])
+@login_required
+@role_required("admin")
+def delete_user(id):
+    '''Admin page with form for editing users'''
+    form = YesNoForm()
+    user = db_user.get_user_data(id)
+    if form.validate_on_submit():
+        if form.yes.data:
+            db_user.delete_user(id)
+            return redirect(url_for('edit_users_page'))
+        else: return redirect(url_for('edit_users_page'))
+    return render_template('delete_product.html', product = user , form = form)
 
 @app.route('/base', methods=['GET', 'POST'])
 def base_page():
@@ -203,7 +260,7 @@ def delete_product(id):
 @app.route('/login_test_user', methods=['GET', 'POST'])
 def login_test_user():
     '''only for testing delete it after development'''
-    log_this_account = 'user'
+    log_this_account = 'admin'
     if log_this_account == 'user':
         current_user = User("63fdba6ee32d2888e837368a")#test user
     if log_this_account == 'admin':

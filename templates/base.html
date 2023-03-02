@@ -27,6 +27,8 @@
                     {% if current_user.is_authenticated and current_user.role == "admin" %}
                     <li class="menu_item"><a class="btn" href="{{ url_for('admin_page') }}">Administrace</a></li>
                     <li class="menu_item"><a class="btn" href="{{ url_for('edit_products_page') }}">Správa produktů</a></li>
+                    <li class="menu_item"><a class="btn" href="{{ url_for('edit_users_page') }}">Správa uživatelů</a></li>
+
                     {% endif %}
                     <li class="menu_item"><a class="btn" href="/zatim jsem neresil">O nás</a></li>
                     <li class="menu_item"><a class="btn" href="/zatim jsem neresil">Kontakt</a></li>

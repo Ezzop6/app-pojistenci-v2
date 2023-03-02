@@ -36,7 +36,14 @@
     {{ change_password_form[field].label }}: {{ ', '.join(errors) }}
 </div>
     {% endfor %}
-    
+
+{% if current_user.is_authenticated and current_user.role == "admin" %}
+<form method="post">
+    {{ role_form.csrf_token }}
+    {{ role_form.role }}
+    <input name="change_role_form" value="Změnit roli" type="submit">
+</form>
+{% endif %}
 
 
 {% endblock %}

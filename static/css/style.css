@@ -35,6 +35,7 @@ header {
 
 .menu {
     display: flex;
+    margin-bottom: 2rem;
 }
 /* menu button */
 .menu_item{
@@ -44,14 +45,14 @@ header {
 .menu_item a {
     text-decoration: none;
     color: var(--color-text-logo);
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 500;
     margin: 0 10px;
 }
 
 .btn {
     position: relative;
-    font-size: 14px;
+    font-size: 10px;
     text-transform: uppercase;
     text-decoration: none;
     display: inline-block;
@@ -59,7 +60,6 @@ header {
     border-radius: 6em;
     transition: all .2s;
     border: none;
-    font-family: inherit;
     font-weight: 500;
     color: black;
     background-color: var(--color-button-background);
@@ -125,7 +125,7 @@ footer {
     display: flex;
     justify-content: space-evenly;
     padding: 30px;
-    position: absolute;
+
     bottom: 0;
     width: 100%;
     background: linear-gradient(0deg, var(--color-header) 0%, var(--color-header) 90%, var(--color-background) 100%);

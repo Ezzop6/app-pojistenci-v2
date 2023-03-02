@@ -91,7 +91,19 @@ class DbUsers(DbConnection):
             if not self.check_if_login_exists(fake_users["login"]):
                 self.db.insert_one(fake_users)
                 print(f"User {fake_users} added")
-
+                
+    def get_all_users(self):
+        '''Returns all users'''
+        return self.db.find()
+    
+    def change_user_role(self, user_id, role):
+        '''Changes user role'''
+        self.db.update_one({"_id": ObjectId(user_id)}, {"$set": {"role": role}})
+    
+    def delete_user(self, user_id):
+        '''Deletes user'''
+        self.db.delete_one({"_id": ObjectId(user_id)})
+    
 class DbProducts(DbConnection):
     def __init__(self):
         super().__init__()
