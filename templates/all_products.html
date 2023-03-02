@@ -20,11 +20,14 @@
     <section>
         <h2>Producty</h2>
         <table>
-        <thead>
-            <tr>Jmeno produktu</tr>
-            <tr>Popis Produktu</tr>
-            <tr>Cena za mesic</tr>
-        </thead>
+            <tr>
+                <thead>
+                    <th>Jmeno produktu</th>
+                    <th>Popis Produktu</th>
+                    <th>Cena za mesic</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </thead>
             {% for product in products %}
                 <tr>
                     <td>{{ product['name'] }}</td>

@@ -42,6 +42,9 @@ h1 {
 p {
     color: var(--color-text);
 }
+.error {
+    color: var(--color-error);
+}
 
 .joke {
     font-family: 'Roboto', sans-serif;
@@ -51,16 +54,7 @@ p {
     margin-bottom: 1rem;
 }
 
-.homu_button {
-    text-decoration: none;
-    background: var(--color-error);
-    color: var(--color-text);
-    border: none;
-    padding: 1rem 2rem;
-    margin: 3rem 0 0 0;
-    font-size: 1.5rem;
-    font-weight: 300;
-    border-radius: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.btn {
+    margin-top: 2rem;
+    font-size: 2rem;
 }
