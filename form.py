@@ -191,11 +191,11 @@ class EditProductsForm(FlaskForm):
     name = StringField("Název", widget = widgets.Input(input_type = "text"),
         render_kw = {"placeholder": "Název"},
         validators = [validators.DataRequired(message="Musíte zadat název produktu"),
-                    validators.Length(min=3, max=20, message="Název musí mít 3 až 20 znaků")])
+                    validators.Length(min=3, max=200, message="Název musí mít 3 až 200 znaků")])
     description = TextAreaField("Popis", widget = widgets.TextArea(),
         render_kw = {"placeholder": "Popis"},
         validators = [validators.DataRequired(message="Musíte zadat popis produktu"),
-                    validators.Length(min=20, max=666, message="Popis musí mít 20 až 666 znaků")])
+                    validators.Length(min=20, max=2000, message="Popis musí mít 20 až 2000 znaků")])
     price_per_month = IntegerField("Cena za měsíc", widget = widgets.Input(input_type = "number"),
         render_kw = {"placeholder": "Cena za měsíc"},
         validators = [validators.DataRequired(message="Musíte zadat cenu za měsíc")])
@@ -217,7 +217,7 @@ class EditProduct(FlaskForm):
     description = TextAreaField("Popis", widget = widgets.TextArea(),
         render_kw = {"placeholder": "Popis"},
         validators = [validators.DataRequired(message="Musíte zadat popis produktu"),
-                    validators.Length(min=20, max=666, message="Popis musí mít 20 až 666 znaků")])
+                    validators.Length(min=20, max=2000, message="Popis musí mít 20 až 2000 znaků")])
     price_per_month = IntegerField("Cena za měsíc", widget = widgets.Input(input_type = "number"),
         render_kw = {"placeholder": "Cena za měsíc"},
         validators = [validators.DataRequired(message="Musíte zadat cenu za měsíc")])

@@ -2,22 +2,28 @@
 {% block title %} Edit {{product['product_name']}} {% endblock %}
 {% block content %}
 
-<h1>Edit product</h1>
-{{ product }}
 
-<h1>toto je stranka pro adminy na editaci produktu:{{ product['name'] }}</h1>
-<form method="post">
-    {{ form.csrf_token }}
-    {{ form.description }}
-    {{ form.price_per_month }}
-    <input type="submit">
-</form>
-<hr>
-{% for field, errors in form.errors.items() %}
-<div class="alert alert-error">
-    {{ form[field].label }}: {{ ', '.join(errors) }}
-</div>
-    {% endfor %}
-
+<section class="produkt_wraper">
+    <div class="produkt">
+        <h2>{{ product['name'] }}</h2>
+        <br>
+        <p> {{ product['description'] }}</p> 
+    </div>
+    <form method="post">
+        {{ form.csrf_token }}
+        <p>Upravit popis:</p>
+            {{ form.description }}
+        <p>Upravit cenu:</p>
+            {{ form.price_per_month }}
+        <input class="btn" type="submit">
+    </form>
+    <hr>
+    {% for field, errors in form.errors.items() %}
+    <div class="alert alert-error">
+        {{ form[field].label }}: {{ ', '.join(errors) }}
+    </div>
+        {% endfor %}
+    
+    
 
 {% endblock %}

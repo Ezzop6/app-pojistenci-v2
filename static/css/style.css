@@ -14,6 +14,12 @@
     --color-text: #f6f6f6;
     --color-button-background: #5696C3;
     --color-background: #b8c5d0;
+    --color-btn-edit: #0e870c;
+    --color-btn-delete: #a30404;
+    --table-head: #555;
+    --table-row-hover: #99999979;
+    --table-row-nth-child: #a1b9cd;
+
 }
 
 body {
@@ -161,4 +167,69 @@ footer {
     text-align: center;
     color: var(--color-text);
     padding-bottom: 30px;
+}
+/* produkt section */
+.produkt_wraper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.produkt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    padding: 30px;
+    background-color: var(--color-background);
+}
+
+.green_btn {
+    background-color: var(--color-btn-edit);
+}
+.red_btn {
+    background-color: var(--color-btn-delete);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 5px 0px;
+}
+
+th {
+    background-color: var(--table-head);
+    color: #fff;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--table-row-nth-child);
+}
+
+tbody tr:hover {
+    background-color: var(--table-row-hover);
+}
+
+td:before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+thead th {
+    padding: 10px 0px;
 }

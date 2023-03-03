@@ -8,7 +8,7 @@
         {{ form_login.csrf_token }}
         {{ form_login.login }}
         {{ form_login.password }}
-        <input type="submit">
+        <input class="btn" type="submit">
     </form>
     <hr>
     {% for field, errors in form_login.errors.items() %}
