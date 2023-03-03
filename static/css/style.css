@@ -209,6 +209,7 @@ th {
     background-color: var(--table-head);
     color: #fff;
     font-weight: bold;
+    text-align: center;
 }
 
 tbody tr:nth-child(even) {
@@ -229,7 +230,13 @@ thead {
     position: sticky;
     top: 0;
     z-index: 1;
+    gap: 10px;
 }
 thead th {
     padding: 10px 0px;
+}
+
+
+.center {
+    text-align: center;
 }

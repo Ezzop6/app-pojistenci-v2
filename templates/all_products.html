@@ -25,8 +25,8 @@
                 <thead>
                     <th>Jmeno produktu</th>
                     <th>Popis Produktu</th>
-                    <th>Cena za mesic</th>
-                    <th>Slozka s obrazky</th>
+                    <th>Měsíčně</th>
+                    <th>Imgs</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </thead>
@@ -34,9 +34,8 @@
                 <tr>
                     <td>{{ product['name'] }}</td>
                     <td>{{ product['description'] }}</td>
-                    <td>{{ product['price'] }}</td>
+                    <td class="center">{{ product['price'] }}</td>
                     <td>{{ product['imgs_path'] }}</td>
-
                     <td><a class="btn green_btn" href="{{ url_for('edit_product',id=product['name']) }}">edit</a></td>
                     <td><a class="btn red_btn" href="{{ url_for('delete_product',id=product['name']) }}">delete</a></td>
                 </tr>

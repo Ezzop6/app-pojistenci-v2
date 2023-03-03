@@ -70,7 +70,7 @@ def logout():
 @app.route('/')
 def index_page():
     '''Main page'''
-    return render_template('index.html')
+    return render_template('index.html', products = db_product.get_all_products())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
@@ -226,6 +226,8 @@ def base_page():
     '''base page for testing purposes'''
     return render_template('base.html')
 
+#TODO predelat na neco lepe citelneho neco jako je admin edit user
+# je treba predelat i cely formular pravdepodobne cast databaze
 @app.route('/admin/edit_product/<id>', methods=['GET', 'POST'])
 @login_required
 @role_required("admin")

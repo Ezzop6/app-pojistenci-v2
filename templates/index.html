@@ -9,7 +9,18 @@ nejaka stilizace pro prihlasene uzivatele
 {% endif %}
 
 {% if not current_user.is_authenticated %}
-nejaka stilizace pro neprihlasene uzivatele asi tedy bude nejaka reklama na produkty
+<section>
+
+        {% for product in products %}
+        <div class="product">
+            <h2>{{ product['name'] }}</h2>
+            <p>{{ product['description'] }}</p>
+            <p>{{ product['price_per_month'] }}</p>
+    
+            
+        </div>
+        {% endfor %}
+</section>
 
 {% endif %}
 
