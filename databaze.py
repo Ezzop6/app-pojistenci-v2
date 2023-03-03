@@ -136,6 +136,9 @@ class DbProducts(DbConnection):
         '''Returns product id'''
         return self.db.find_one({"name": product_name})["_id"]
     
+    def add_product_imgs_path(self,product_name,imgs_path):
+        self.db.update_one({"name": product_name}, {"$set": {"imgs_path": imgs_path}})
+    
     def update_product(self,product_name,description,price_per_month):
         '''Updates product description and price by name'''
         self.db.update_one({"name": product_name}, {"$set": {"description": description, "price": price_per_month}})

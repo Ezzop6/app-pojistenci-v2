@@ -162,8 +162,7 @@ def edit_products_page():
     new_produkt = EditProductsForm()
     products = db_product.get_all_products()
     if new_produkt.validate_on_submit():
-        cprint("clicked")
-        new_produkt = {"name": new_produkt.name.data, "price": new_produkt.price_per_month.data, "description": new_produkt.description.data}
+        new_produkt = {"imgs_path":new_produkt.imgs_path.data,"name": new_produkt.name.data, "price": new_produkt.price_per_month.data, "description": new_produkt.description.data}
         db_product.add_product(new_produkt)
         return redirect(url_for('edit_products_page'))
     return render_template('all_products.html', new_produkt = new_produkt, products = products)
@@ -237,6 +236,7 @@ def edit_product(id):
     edited_product.description.render_kw = {"placeholder": product["description"]}
     edited_product.price_per_month.render_kw = {"placeholder": product["price"]}
     if edited_product.validate_on_submit():
+        db_product.add_product_imgs_path(id, edited_product.imgs_path.data)
         db_product.update_product(id, edited_product.description.data, edited_product.price_per_month.data)
         return redirect(url_for('edit_products_page'))
     return render_template('edit_product.html', product = product, form = edited_product)

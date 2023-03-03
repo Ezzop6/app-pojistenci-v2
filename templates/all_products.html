@@ -8,6 +8,7 @@
         {{ new_produkt.csrf_token }}
         {{ new_produkt.name }}
         {{ new_produkt.description }}
+        {{ new_produkt.imgs_path }}
         {{ new_produkt.price_per_month }}
         <input type="submit">
         <hr>
@@ -25,6 +26,7 @@
                     <th>Jmeno produktu</th>
                     <th>Popis Produktu</th>
                     <th>Cena za mesic</th>
+                    <th>Slozka s obrazky</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </thead>
@@ -33,6 +35,8 @@
                     <td>{{ product['name'] }}</td>
                     <td>{{ product['description'] }}</td>
                     <td>{{ product['price'] }}</td>
+                    <td>{{ product['imgs_path'] }}</td>
+
                     <td><a class="btn green_btn" href="{{ url_for('edit_product',id=product['name']) }}">edit</a></td>
                     <td><a class="btn red_btn" href="{{ url_for('delete_product',id=product['name']) }}">delete</a></td>
                 </tr>

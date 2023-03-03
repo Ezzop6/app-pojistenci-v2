@@ -199,6 +199,8 @@ class EditProductsForm(FlaskForm):
     price_per_month = IntegerField("Cena za měsíc", widget = widgets.Input(input_type = "number"),
         render_kw = {"placeholder": "Cena za měsíc"},
         validators = [validators.DataRequired(message="Musíte zadat cenu za měsíc")])
+    imgs_path = StringField("Složka k obrázkům", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "Složka k obrázkům"})
     submit = SubmitField("Potvrdit")
     
     def validate_price_per_month(self, price_per_month):
@@ -221,6 +223,8 @@ class EditProduct(FlaskForm):
     price_per_month = IntegerField("Cena za měsíc", widget = widgets.Input(input_type = "number"),
         render_kw = {"placeholder": "Cena za měsíc"},
         validators = [validators.DataRequired(message="Musíte zadat cenu za měsíc")])
+    imgs_path = StringField("Složka k obrázkům", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "Složka k obrázkům"})
     submit = SubmitField("Potvrdit")
     
     def validate_price_per_month(self, price_per_month):
