@@ -18,6 +18,7 @@ login_manager.init_app(app)
 db_user = DbUsers()
 db_product = DbProducts()
 db_up = DbUsersProducts()
+
 class User(UserMixin):
     def __init__(self, login):
         self.id = login
@@ -276,4 +277,5 @@ if __name__ == '__main__':
     host = os.getenv('IP', '0.0.0.0')
     port = int(os.getenv('PORT', 5000))
     app.debug = True #TODO remove this after development
+    app.jinja_env.globals.update(get_random_produkt_img=get_random_produkt_img)
     app.run(host=host, port=port)

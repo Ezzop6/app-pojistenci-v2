@@ -16,8 +16,12 @@ nejaka stilizace pro prihlasene uzivatele
             <h2>{{ product['name'] }}</h2>
             <p>{{ product['description'] }}</p>
             <p>{{ product['price_per_month'] }}</p>
-    
-            
+
+
+        {% if product['imgs_path'] %}
+        {% set img_path = get_random_produkt_img(product['imgs_path']) %}
+            <img src="{{ url_for('static', filename=img_path) }}" alt="product image">
+        {% endif %}`
         </div>
         {% endfor %}
 </section>
