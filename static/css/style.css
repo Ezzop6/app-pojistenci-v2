@@ -12,13 +12,17 @@
     --color-header: #042138;
     --color-text-logo: #b8c5d0;
     --color-text: #f6f6f6;
+    --color-produkt-background: #c0d2e0;
     --color-button-background: #5696C3;
     --color-background: #b8c5d0;
     --color-btn-edit: #0e870c;
     --color-btn-delete: #a30404;
+    --color-shadow: #171616;
     --table-head: #555;
     --table-row-hover: #99999979;
     --table-row-nth-child: #a1b9cd;
+    
+    
 
 }
 
@@ -131,7 +135,6 @@ footer {
     display: flex;
     justify-content: space-evenly;
     padding: 30px;
-
     bottom: 0;
     width: 100%;
     background: linear-gradient(0deg, var(--color-header) 0%, var(--color-header) 90%, var(--color-background) 100%);
@@ -153,6 +156,7 @@ footer {
     color: var(--color-text);
 }
 .kontakt_info a {
+    margin-top: 15px;
     text-decoration: none;
 }
 .social_button img {
@@ -168,7 +172,7 @@ footer {
     color: var(--color-text);
     padding-bottom: 30px;
 }
-/* produkt section */
+/* admin edit tab section */
 .produkt_wraper{
     display: flex;
     flex-direction: column;
@@ -195,12 +199,12 @@ footer {
 }
 
 table {
+
     border-collapse: collapse;
     width: 100%;
 }
 
-th,
-td {
+th, td {
     text-align: left;
     padding: 5px 0px;
 }
@@ -239,4 +243,56 @@ thead th {
 
 .center {
     text-align: center;
+}
+
+/* main page produkts section */
+
+.produkt_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.product {
+    width: 70%;
+    padding: 30px;
+    background-color: var(--color-produkt-background);
+    margin: 3rem 0;
+    border-radius: 1rem;
+    box-shadow: var(--color-shadow) 0px 0px 10px;
+    display: flex;
+    flex-direction: row;
+
+}
+.product_img {
+    max-height: 300px;
+    border-radius: 1rem;
+    box-shadow: var(--color-shadow) 0px 0px 10px;
+}
+.product .right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.product .right h2 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin: 0 0 40px 0;
+}
+
+.product .right p {
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0 40px;
+    margin: 0 0 40px 0;
+}
+
+.product .right a {
+    position: absolute;
+    bottom: 0px;
+    right: 30px;
 }

@@ -9,22 +9,24 @@ nejaka stilizace pro prihlasene uzivatele
 {% endif %}
 
 {% if not current_user.is_authenticated %}
-<section>
-
         {% for product in products %}
+<section class="produkt_section">
         <div class="product">
-            <h2>{{ product['name'] }}</h2>
-            <p>{{ product['description'] }}</p>
-            <p>{{ product['price_per_month'] }}</p>
-
-
-        {% if product['imgs_path'] %}
-        {% set img_path = get_random_produkt_img(product['imgs_path']) %}
-            <img src="{{ url_for('static', filename=img_path) }}" alt="product image">
-        {% endif %}`
+            <div  class="left">
+                {% if product['imgs_path'] %}
+                {% set img_path = get_random_produkt_img(product['imgs_path']) %}
+                    <img class="product_img" src="{{ url_for('static', filename=img_path) }}" alt="product image">
+                {% endif %}
+            </div>
+            <div class="right">
+                <h2>{{ product['name'] }}</h2>
+                <p>{{ product['description'] }}</p>
+                <a class="btn" href="#">Sjednat</a>
+            </div>
         </div>
-        {% endfor %}
 </section>
+
+        {% endfor %}
 
 {% endif %}
 
