@@ -4,6 +4,7 @@ from pymongo import MongoClient ,ASCENDING, DESCENDING
 from bson.objectid import ObjectId
 from customtools.fake_users.user_creator import RandomUser
 from customtools.tools import *
+import re
 
 
 class DbConnection:
@@ -110,6 +111,13 @@ class DbUsers(DbConnection):
             users = self.db.find().sort(sort_by, ASCENDING)
         else:
             users = self.db.find().sort(sort_by, DESCENDING)
+        return users
+    
+    def find_users_by(self, search_by, search_for):
+        '''Returns a list of users found by the given key and value'''
+        regex = re.compile(search_for, re.IGNORECASE)  # Vytvoření regulárního výrazu pro částečné shodování
+        query = {search_by: regex}  # Vytvoření dotazu s použitím regulárního výrazu
+        users = self.db.find(query)
         return users
     
 class DbProducts(DbConnection):

@@ -172,21 +172,15 @@ def edit_products_page():
 @login_required
 @role_required("admin")
 def edit_users_page():
-    users = db_user.get_all_users()
     sorting_form = FindUserForm()
     
     sort_direction = request.args.get('sort_direction', 'asc')
     sort_by = request.args.get('sort_by', 'login')
     
     users = db_user.sort_users_by(sort_direction, sort_by)
-    print(sort_direction)
     if sorting_form.validate_on_submit():
+        users = db_user.find_users_by(sorting_form.search_by.data, sorting_form.search.data.capitalize())
         
-        cprint(sort_direction)
-        # Zavolejte metodu sort_users_by() a uložte výsledky a nový směr řazení
-        
-
-
     return render_template('all_users.html', 
                         users = users,
                         sorting_form = sorting_form,

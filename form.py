@@ -299,5 +299,8 @@ class EditUserRoleForm(FlaskForm):
     submit = SubmitField("Uložit")
     
 class FindUserForm(FlaskForm):
-    find_user = StringField("Hledat", widget = widgets.Input(input_type = "text"),
+    search_by = SelectField("Hledat podle", choices = [("login", "login"), ("name", "jména"), ("surname", "příjmení"),
+        ("city", "města"), ("street", "ulice"), ("street_number", "čísla popisného"), ("zip_code", "PSČ"), ("email", "email"),
+        ("birth_date", "datum narození")])
+    search = StringField("Hledat", widget = widgets.Input(input_type = "text"),
         render_kw = {"placeholder": "Hledat"})

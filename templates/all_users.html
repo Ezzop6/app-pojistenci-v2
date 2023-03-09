@@ -7,10 +7,10 @@
         <h2>Uzivatele</h2>
         <form method="post">
             {{ sorting_form.csrf_token }}
-            {{ sorting_form.find_user }}
+            {{ sorting_form.search_by }}
+            {{ sorting_form.search }}
             <input class="btn" type="submit">
         </form>
-
         <table>
             <thead>
                 <tr>
