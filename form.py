@@ -3,6 +3,7 @@ from wtforms import  TextAreaField, IntegerField, SelectField ,widgets, StringFi
 from databaze import DbUsers, DbProducts
 import datetime
 
+
 db_user = DbUsers()
 db_product = DbProducts()
 
@@ -296,3 +297,7 @@ class ChangePasswordForm(FlaskForm):
 class EditUserRoleForm(FlaskForm):
     role = SelectField("Role", choices = [("user", "user"), ("admin", "admin")])
     submit = SubmitField("Uložit")
+    
+class FindUserForm(FlaskForm):
+    find_user = StringField("Hledat", widget = widgets.Input(input_type = "text"),
+        render_kw = {"placeholder": "Hledat"})

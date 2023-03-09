@@ -5,20 +5,26 @@
     <h1>toto je stranka pro adminy na editaci uzivatelu</h1>
     <section>
         <h2>Uzivatele</h2>
+        <form method="post">
+            {{ sorting_form.csrf_token }}
+            {{ sorting_form.find_user }}
+            <input class="btn" type="submit">
+        </form>
+
         <table>
             <thead>
                 <tr>
-                    <th>Login</th>
-                    <th>Příjmení</th>
-                    <th>Jméno</th>
-                    <th>Datum narození</th>
-                    <th>Město</th>
-                    <th>Ulice</th>
-                    <th>Číslo popisné</th>
-                    <th>PSČ</th>
-                    <th>Telefon</th>
-                    <th>email</th>
-                    <th>Role</th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=login">Login</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=surname">Příjmení</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=name">Jméno</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=birth_date">Datum narození</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=city">Město</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=street">Ulice</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=street_number">Číslo popisné</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=zip_code">PSČ</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=phone_number">Telefon</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=email">email</a></th>
+                    <th><a href="?sort_direction={{ 'asc' if sort_direction == 'desc' else 'desc' }}&sort_by=role">Role</a></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

@@ -1,6 +1,6 @@
 from dotenv import load_dotenv, find_dotenv
 import os
-from pymongo import MongoClient
+from pymongo import MongoClient ,ASCENDING, DESCENDING
 from bson.objectid import ObjectId
 from customtools.fake_users.user_creator import RandomUser
 from customtools.tools import *
@@ -103,6 +103,14 @@ class DbUsers(DbConnection):
     def delete_user(self, user_id):
         '''Deletes user'''
         self.db.delete_one({"_id": ObjectId(user_id)})
+        
+    def sort_users_by(self, sort_direction='asc', sort_by='login'):
+        '''Returns a list of users sorted by the given key and direction'''
+        if sort_direction == 'asc':
+            users = self.db.find().sort(sort_by, ASCENDING)
+        else:
+            users = self.db.find().sort(sort_by, DESCENDING)
+        return users
     
 class DbProducts(DbConnection):
     def __init__(self):
