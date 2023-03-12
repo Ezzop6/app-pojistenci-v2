@@ -191,10 +191,14 @@ footer {
     background-color: var(--color-background);
 }
 
-.green_btn {
+
+.green_btn,
+.green_btn::after  {
     background-color: var(--color-btn-edit);
 }
-.red_btn {
+
+.red_btn,
+.red_btn::after {
     background-color: var(--color-btn-delete);
 }
 
@@ -303,19 +307,19 @@ thead th {
 }
 
 .input {
-    border: solid 1.5px #9e9e9e;
+    border: solid 1.5px var(--color-shadow);
     border-radius: 1rem;
     background: none;
     padding: 1rem;
     font-size: 1rem;
-    color: #f5f5f5;
+    color: var(--color-primary-color);
     transition: border 150ms cubic-bezier(0.4,0,0.2,1);
 }
 
 .user-label {
     position: absolute;
     left: 15px;
-    color: #e8e8e8;
+    color: var(--color-primary-color);
     pointer-events: none;
     transform: translateY(1rem);
     transition: 150ms cubic-bezier(0.4,0,0.2,1);
@@ -323,13 +327,13 @@ thead th {
 
 .input:focus, input:valid {
     outline: none;
-    border: 1.5px solid #1a73e8;
+    border: 1.5px solid var(--color-primary-color);
 }
 
 .input:focus ~ label, input:valid ~ label {
     transform: translateY(-50%) scale(0.8);
-    background-color: #212121;
+    background-color: var(--color-background);
     padding: 0 .2em;
-    color: #2196f3;
+    color: var(--color-primary-color);
 }
 
