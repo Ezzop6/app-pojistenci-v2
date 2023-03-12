@@ -18,5 +18,5 @@ Spusťte aplikaci:
 main.py
 
 Použití
-Pro použití aplikace otevřete svůj webový prohlížeč a přejděte na adresu http://localhost:5000. Zde se budete moci přihlásit nebo zaregistrovat, aby vám byly přístupné další funkce aplikace.
+Pro použití aplikace otevřete svůj webový prohlížeč a přejděte na adresu http://localhost:3000. Zde se budete moci přihlásit nebo zaregistrovat, aby vám byly přístupné další funkce aplikace.
 zatim tu skoro nic neni :D
