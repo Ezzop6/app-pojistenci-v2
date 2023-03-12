@@ -7,8 +7,8 @@
 
 <form method="post">
     {{ form.csrf_token }}
-    {{ form.yes }}
-    {{ form.no }}
+    {{ form.yes(class="btn red_btn") }}
+    {{ form.no(class="btn green_btn")  }}
 </form>
 
 {% endblock %}

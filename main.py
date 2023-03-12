@@ -123,7 +123,6 @@ def user_page(login):
     change_password_form = ChangePasswordForm()
     role_form = EditUserRoleForm()
     
-
     if request.method == 'POST' and 'user_form' in request.form:
         if user_form.validate_on_submit():
             for form, data in user_form.data.items():
@@ -150,8 +149,10 @@ def user_page(login):
 def admin_page():
     '''Admin page with fake user generator'''
     fake_user_generator = AddFakeUserForm()
+    
     if fake_user_generator.validate_on_submit():
         db_user.create_fake_users(fake_user_generator.number_users.data)
+        
     return render_template('admin.html', fake_user_generator = fake_user_generator)
 
 @app.route('/admin/edit_product', methods=['GET', 'POST'])
@@ -162,9 +163,11 @@ def edit_products_page():
     edited products are saved to database'''
     new_produkt = EditProductsForm()
     products = db_product.get_all_products()
+    
     if new_produkt.validate_on_submit():
         new_produkt = {"imgs_path":new_produkt.imgs_path.data,"name": new_produkt.name.data, "price": new_produkt.price_per_month.data, "description": new_produkt.description.data}
         db_product.add_product(new_produkt)
+        
         return redirect(url_for('edit_products_page'))
     return render_template('all_products.html', new_produkt = new_produkt, products = products)
 
@@ -179,7 +182,7 @@ def edit_users_page():
     
     users = db_user.sort_users_by(sort_direction, sort_by)
     if sorting_form.validate_on_submit():
-        users = db_user.find_users_by(sorting_form.search_by.data, sorting_form.search.data.capitalize())
+        users = db_user.find_users_by(sorting_form.search_by.data, sorting_form.search.data)
         
     return render_template('all_users.html', 
                         users = users,
@@ -251,7 +254,7 @@ def edit_product(id):
     if edited_product.validate_on_submit():
         db_product.add_product_imgs_path(id, edited_product.imgs_path.data)
         db_product.update_product(id, edited_product.description.data, edited_product.price_per_month.data)
-        return redirect(url_for('edit_products_page'))
+        return redirect(url_for('edit_products_page')) 
     return render_template('edit_product.html', product = product, form = edited_product)
 
 @app.route('/admin/delete/<id>', methods=['GET', 'POST'])

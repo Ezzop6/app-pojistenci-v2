@@ -9,10 +9,22 @@
 
 <form method="post">
     {{ form_complete_register.csrf_token }}
-    {{ form_complete_register.name }}
-    {{ form_complete_register.surname }}
-    {{ form_complete_register.birt_date }}
-    {{ form_complete_register.submit }}
+    <div class="input-group">
+        {{ form_complete_register.name(class='input', required='required', autocomplete='off') }}
+        <label class="user-label">{{ form_complete_register.name.label }}</label>
+    </div>
+    <div class="input-group">
+        {{ form_complete_register.surname(class='input', required='required', autocomplete='off') }}
+        <label class="user-label">{{ form_complete_register.surname.label }}</label>
+    </div>
+    <div class="input-group">
+        {{ form_complete_register.birt_date(class='input', required='required', autocomplete='off') }}
+        <label class="user-label">{{ form_complete_register.birt_date.label }}</label>
+    </div>
+    <div class="input-group">
+        {{ form_complete_register.submit(class='btn') }}
+    </div>
+
 </form>
 <hr>
 {% for field, errors in form_complete_register.errors.items() %}

@@ -11,12 +11,18 @@
     </div>
     <form method="post">
         {{ form.csrf_token }}
-        <p>Upravit popis:</p>
-            {{ form.description }}
-        <p>Upravit cenu:</p>
-            {{ form.price_per_month }}
-            <p>Upravit cestu k obrazkum:</p>
-            {{ form.imgs_path }}
+        <div class="input-group">
+            {{ form.description(class='input', required='required', autocomplete='off') }}
+            <label class="user-label">{{ form.description.label }}</label>
+        </div>
+        <div class="input-group">
+            {{ form.price_per_month(class='input', required='required', autocomplete='off') }}
+            <label class="user-label">{{ form.price_per_month.label }}</label>
+        </div>
+        <div class="input-group">
+            {{ form.imgs_path(class='input', required='required', autocomplete='off') }}
+            <label class="user-label">{{ form.imgs_path.label }}</label>
+        </div>
         
         <input class="btn" type="submit">
     </form>

@@ -7,8 +7,13 @@
         <h2>Uzivatele</h2>
         <form method="post">
             {{ sorting_form.csrf_token }}
-            {{ sorting_form.search_by }}
-            {{ sorting_form.search }}
+            <div class="input-group">
+                {{ sorting_form.search_by (class='input', required='required', autocomplete='off') }}
+            </div>
+            <div class="input-group">
+                {{ sorting_form.search(class='input', required='required', autocomplete='off') }}
+                <label class="user-label">{{ sorting_form.search.label }}</label>
+            </div>
             <input class="btn" type="submit">
         </form>
         <table>

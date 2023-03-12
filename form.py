@@ -120,15 +120,12 @@ class CustomTest:
     
 class CompleteRegisterForm(FlaskForm):
     name = StringField("Jméno", widget = widgets.Input(input_type = "text"),
-                        render_kw = {"placeholder": "Jméno"},
                         validators=[validators.DataRequired(message="Musíte zadat jméno"),
                                     validators.Length(min=2, max=20, message="Jméno musí mít 2 až 20 znaků")])
     surname = StringField("Příjmení", widget = widgets.Input(input_type = "text"),
-                        render_kw = {"placeholder": "Příjmení"},
                         validators=[validators.DataRequired(message="Musíte zadat příjmení"),
                                     validators.Length(min=2, max=20, message="Příjmení musí mít 2 až 20 znaků")])
     birt_date = DateField("Datum narození", widget = widgets.Input(input_type = "date"),
-                        render_kw = {"placeholder": "Datum narození "},
                         validators=[validators.DataRequired(message="Musíte zadat datum narození")])
     submit = SubmitField("Uložit")
     
@@ -145,14 +142,11 @@ class CompleteRegisterForm(FlaskForm):
 
 class RegisterForm(FlaskForm):
     login = StringField("Login", widget=widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Uživatelské jméno"}, 
         validators=[validators.DataRequired(message="Musíte zadat login"),
                     validators.Length(min=3, max=20, message="Login musí mít 3 až 20 znaků")])
     password = PasswordField("Heslo", widget=widgets.Input(input_type = "password"),
-        render_kw = {"placeholder": "Heslo"}, 
         validators = [validators.DataRequired(message="Musíte zadat heslo")])
     password2 = PasswordField("Zopakujte heslo", widget = widgets.Input(input_type = "password"),
-        render_kw={"placeholder": "Zopakujte heslo"},
         validators=[validators.DataRequired(message="Musíte zadat heslo")])
     submit = SubmitField("Registrovat se")
     
@@ -168,11 +162,9 @@ class RegisterForm(FlaskForm):
         
 class LoginForm(FlaskForm):
     login = StringField("Login", widget = widgets.Input(input_type = "text"),
-        render_kw={"placeholder": "Uživatelské jméno"},
         validators=[validators.DataRequired(message="Musíte zadat login"),
                     validators.Length(min=3, max=20, message="Login musí mít 3 až 20 znaků")])
     password = PasswordField("Heslo", widget = widgets.Input(input_type = "password"),
-        render_kw={"placeholder": "Heslo"},
         validators=[validators.DataRequired(message="Musíte zadat heslo"),
                     validators.Length(min=4, message="Heslo musí mít minimálně 4 znaků")])
     submit = SubmitField("Přihlásit se")
@@ -190,18 +182,14 @@ class LoginForm(FlaskForm):
 
 class EditProductsForm(FlaskForm):
     name = StringField("Název", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Název"},
         validators = [validators.DataRequired(message="Musíte zadat název produktu"),
                     validators.Length(min=3, max=200, message="Název musí mít 3 až 200 znaků")])
     description = TextAreaField("Popis", widget = widgets.TextArea(),
-        render_kw = {"placeholder": "Popis"},
         validators = [validators.DataRequired(message="Musíte zadat popis produktu"),
                     validators.Length(min=20, max=2000, message="Popis musí mít 20 až 2000 znaků")])
     price_per_month = IntegerField("Cena za měsíc", widget = widgets.Input(input_type = "number"),
-        render_kw = {"placeholder": "Cena za měsíc"},
         validators = [validators.DataRequired(message="Musíte zadat cenu za měsíc")])
-    imgs_path = StringField("Složka k obrázkům", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Složka k obrázkům"})
+    imgs_path = StringField("Složka k obrázkům", widget = widgets.Input(input_type = "text"))
     submit = SubmitField("Potvrdit")
     
     def validate_price_per_month(self, price_per_month):
@@ -218,14 +206,11 @@ class EditProductsForm(FlaskForm):
         
 class EditProduct(FlaskForm):
     description = TextAreaField("Popis", widget = widgets.TextArea(),
-        render_kw = {"placeholder": "Popis"},
         validators = [validators.DataRequired(message="Musíte zadat popis produktu"),
                     validators.Length(min=20, max=2000, message="Popis musí mít 20 až 2000 znaků")])
     price_per_month = IntegerField("Cena za měsíc", widget = widgets.Input(input_type = "number"),
-        render_kw = {"placeholder": "Cena za měsíc"},
         validators = [validators.DataRequired(message="Musíte zadat cenu za měsíc")])
-    imgs_path = StringField("Složka k obrázkům", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Složka k obrázkům"})
+    imgs_path = StringField("Složka k obrázkům", widget = widgets.Input(input_type = "text"))
     submit = SubmitField("Potvrdit")
     
     def validate_price_per_month(self, price_per_month):
@@ -238,8 +223,7 @@ class YesNoForm(FlaskForm):
     no = SubmitField("Ne")
     
 class AddFakeUserForm(FlaskForm):
-    number_users = IntegerField("Kolik", widget = widgets.Input(input_type = "number"),default=1,
-        render_kw = {"placeholder": "Kolik uzivatelu"})
+    number_users = IntegerField("Vytvor uzivatele", widget = widgets.Input(input_type = "number"))
     submit = SubmitField("Potvrdit")
     
     def validate_number_users(self, number_users):
@@ -248,20 +232,13 @@ class AddFakeUserForm(FlaskForm):
             raise ValidationError(f"Povoleno je max 100 : {number_users}")
         
 class EditUserDataForm(FlaskForm):
-    name = StringField("Jméno", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Jméno"})
-    surname = StringField("Příjmení", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Příjmení"})
-    city = StringField("Město", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Město"})
-    street = StringField("Ulice", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Ulice"})
-    street_number = StringField("Číslo popisné", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Číslo popisné"})
-    zip_code = StringField("PSČ", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "PSČ"})
-    email = StringField("Email", widget = widgets.Input(input_type = "email"),
-        render_kw = {"placeholder": "Email"})
+    name = StringField("Jméno", widget = widgets.Input(input_type = "text"))
+    surname = StringField("Příjmení", widget = widgets.Input(input_type = "text"))
+    city = StringField("Město", widget = widgets.Input(input_type = "text"))
+    street = StringField("Ulice", widget = widgets.Input(input_type = "text"))
+    street_number = StringField("Číslo popisné", widget = widgets.Input(input_type = "text"))
+    zip_code = StringField("PSČ", widget = widgets.Input(input_type = "text"))
+    email = StringField("Email", widget = widgets.Input(input_type = "email"))
     submit = SubmitField("Uložit")
     
     def validate_name(self, name):
@@ -284,10 +261,8 @@ class EditUserDataForm(FlaskForm):
         
     
 class ChangePasswordForm(FlaskForm):
-    password = PasswordField("Heslo", widget=widgets.Input(input_type = "password"),
-        render_kw = {"placeholder": "Heslo"})
-    password2 = PasswordField("Zopakujte heslo", widget = widgets.Input(input_type = "password"),
-        render_kw={"placeholder": "Zopakujte heslo"})
+    password = PasswordField("Heslo", widget=widgets.Input(input_type = "password"))
+    password2 = PasswordField("Zopakujte heslo", widget = widgets.Input(input_type = "password"))
     change_password = SubmitField("Uložit")
     
     if password != "" or password2 != "":
@@ -302,5 +277,4 @@ class FindUserForm(FlaskForm):
     search_by = SelectField("Hledat podle", choices = [("login", "login"), ("name", "jména"), ("surname", "příjmení"),
         ("city", "města"), ("street", "ulice"), ("street_number", "čísla popisného"), ("zip_code", "PSČ"), ("email", "email"),
         ("birth_date", "datum narození")])
-    search = StringField("Hledat", widget = widgets.Input(input_type = "text"),
-        render_kw = {"placeholder": "Hledat"})
+    search = StringField("Hledat", widget = widgets.Input(input_type = "text"))

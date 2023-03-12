@@ -6,8 +6,11 @@
 <h1>Stranka pro adminy</h1>
 <form method="post">
     {{ fake_user_generator.csrf_token }}
-    {{ fake_user_generator.number_users }}
-    <input type="submit">
+    <div class="input-group">
+        {{ fake_user_generator.number_users(class='input', required='required', autocomplete='off') }}
+        <label class="user-label">{{ fake_user_generator.number_users.label }}</label>
+    </div>
+    <input class="btn" type="submit">
     <hr>
 </form>
 {% for field, errors in fake_user_generator.errors.items() %}

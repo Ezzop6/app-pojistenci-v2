@@ -6,11 +6,23 @@
     <h1>toto je stranka pro adminy na editaci produktu</h1>
     <form method="POST">
         {{ new_produkt.csrf_token }}
-        {{ new_produkt.name }}
-        {{ new_produkt.description }}
-        {{ new_produkt.imgs_path }}
-        {{ new_produkt.price_per_month }}
-        <input type="submit">
+        <div class="input-group">
+            {{ new_produkt.name(class='input', required='required', autocomplete='off') }}
+            <label class="user-label">{{ new_produkt.name.label }}</label>
+        </div>
+        <div class="input-group">
+            {{ new_produkt.description(class='input', required='required', autocomplete='off') }}
+            <label class="user-label">{{ new_produkt.description.label }}</label>
+        </div>
+        <div class="input-group">
+            {{ new_produkt.imgs_path(class='input', required='required', autocomplete='off') }}
+            <label class="user-label">{{ new_produkt.imgs_path.label }}</label>
+        </div>
+        <div class="input-group">
+            {{ new_produkt.price_per_month(class='input', required='required', autocomplete='off') }}
+            <label class="user-label">{{ new_produkt.price_per_month.label }}</label>
+        </div>
+        <input class="btn" type="submit">
         <hr>
         {% for field, errors in new_produkt.errors.items() %}
     <div class="alert alert-error">
